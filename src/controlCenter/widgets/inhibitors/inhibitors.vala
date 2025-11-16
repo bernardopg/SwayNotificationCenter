@@ -19,10 +19,10 @@ namespace SwayNotificationCenter.Widgets {
 
             swaync_daemon.inhibited_changed.connect ((length) => {
                 if (!swaync_daemon.inhibited) {
-                    hide ();
+                    set_visible (false);
                     return;
                 }
-                show ();
+                set_visible (true);
                 title_widget.set_text ("%s %u".printf (title, length));
             });
 
@@ -50,7 +50,7 @@ namespace SwayNotificationCenter.Widgets {
             title_widget = new Gtk.Label (title);
             title_widget.set_halign (Gtk.Align.START);
             title_widget.set_hexpand (true);
-            title_widget.show ();
+            title_widget.set_visible (true);
             append (title_widget);
 
             if (has_clear_all_button) {
@@ -64,11 +64,11 @@ namespace SwayNotificationCenter.Widgets {
                 });
                 clear_all_button.set_can_focus (false);
                 clear_all_button.valign = Gtk.Align.CENTER;
-                clear_all_button.show ();
+                clear_all_button.set_visible (true);
                 append (clear_all_button);
             }
 
-            hide ();
+            set_visible (false);
         }
     }
 }

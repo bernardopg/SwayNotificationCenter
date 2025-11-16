@@ -359,7 +359,7 @@ namespace SwayNotificationCenter {
             this.body.set_lines (this.number_of_body_lines);
 
             // Reset state
-            body_image.hide ();
+            body_image.set_visible (false);
 
             // Removes all image tags and adds them to an array
             if (text.length > 0) {
@@ -403,7 +403,7 @@ namespace SwayNotificationCenter {
                             // https://gitlab.gnome.org/GNOME/gtk/-/issues/7092
                             Gtk.LayoutManager layout = new Gtk.CenterLayout ();
                             body_image.set_layout_manager (layout);
-                            body_image.show ();
+                            body_image.set_visible (true);
                         }
                     }
                 } catch (Error e) {
@@ -555,7 +555,7 @@ namespace SwayNotificationCenter {
 
         private void set_inline_reply () {
             // Reset state
-            inline_reply_box.hide ();
+            inline_reply_box.set_visible (false);
             // Only show inline replies in popup notifications if the compositor
             // supports ON_DEMAND layer shell keyboard interactivity
             if (!ConfigModel.instance.notification_inline_replies
@@ -570,7 +570,7 @@ namespace SwayNotificationCenter {
 
             has_inline_reply = true;
 
-            inline_reply_box.show ();
+            inline_reply_box.set_visible (true);
 
             inline_reply_entry.set_placeholder_text (
                 param.inline_reply_placeholder ?? "Enter Text");

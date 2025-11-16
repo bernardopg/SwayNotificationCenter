@@ -379,7 +379,6 @@ namespace SwayNotificationCenter.Widgets.Mpris {
             // Respect user config: hide shuffle entirely if disabled
             if (!mpris_config.show_shuffle) {
                 button_shuffle.set_visible (false);
-                button_shuffle.hide ();
                 return;
             }
 
@@ -389,15 +388,15 @@ namespace SwayNotificationCenter.Widgets.Mpris {
                 if (shuffle == null || !shuffle.is_of_type (VariantType.BOOLEAN)) {
                     button_shuffle.sensitive = false;
                     button_shuffle.get_child ().opacity = 1;
-                    button_shuffle.hide ();
+                    button_shuffle.set_visible (false);
                 } else {
                     button_shuffle.sensitive = true;
                     button_shuffle.get_child ().opacity =
                         source.media_player.shuffle ? 1 : UNSELECTED_OPACITY;
-                    button_shuffle.show ();
+                    button_shuffle.set_visible (true);
                 }
             } else {
-                button_shuffle.hide ();
+                button_shuffle.set_visible (false);
             }
         }
 
@@ -449,7 +448,6 @@ namespace SwayNotificationCenter.Widgets.Mpris {
             // Respect user config: hide repeat entirely if disabled
             if (!mpris_config.show_repeat) {
                 button_repeat.set_visible (false);
-                button_repeat.hide ();
                 return;
             }
 
@@ -458,7 +456,7 @@ namespace SwayNotificationCenter.Widgets.Mpris {
                 Variant ?repeat = source.get_mpris_player_prop ("LoopStatus");
                 if (repeat == null || !repeat.is_of_type (VariantType.STRING)) {
                     button_repeat.sensitive = false;
-                    button_repeat.hide ();
+                    button_repeat.set_visible (false);
                 } else {
                     string icon_name;
                     double opacity = 1.0;
@@ -485,10 +483,10 @@ namespace SwayNotificationCenter.Widgets.Mpris {
                     button_repeat.get_child ().opacity = opacity;
                     button_repeat.sensitive = true;
                     button_repeat.set_icon_name (icon_name);
-                    button_repeat.show ();
+                    button_repeat.set_visible (true);
                 }
             } else {
-                button_repeat.hide ();
+                button_repeat.set_visible (false);
             }
         }
     }

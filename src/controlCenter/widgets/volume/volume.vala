@@ -9,6 +9,7 @@ namespace SwayNotificationCenter.Widgets {
         Gtk.Box main_volume_slider_container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         Gtk.Label label_widget = new Gtk.Label (null);
         Gtk.Scale slider = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        Gtk.Label percentage_label = new Gtk.Label ("0%");
 
         // Per app volume control
         Gtk.ListBox levels_listbox;
@@ -43,7 +44,9 @@ namespace SwayNotificationCenter.Widgets {
                     this.client.set_device_volume (
                         default_sink,
                         (float) slider.get_value ());
-                    slider.tooltip_text = ((int) slider.get_value ()).to_string ();
+                    int percent = (int) slider.get_value ();
+                    slider.tooltip_text = percent.to_string ();
+                    percentage_label.set_label ("%d%%".printf (percent));
                 }
             });
         }
@@ -130,8 +133,13 @@ namespace SwayNotificationCenter.Widgets {
             slider.draw_value = false;
             slider.set_hexpand (true);
 
+            percentage_label.add_css_class ("percentage-label");
+            percentage_label.set_width_chars (4);
+            percentage_label.set_xalign (1.0f);
+
             main_volume_slider_container.append (label_widget);
             main_volume_slider_container.append (slider);
+            main_volume_slider_container.append (percentage_label);
             append (main_volume_slider_container);
 
             if (show_per_app) {
@@ -207,6 +215,7 @@ namespace SwayNotificationCenter.Widgets {
             if (device != null && device.direction == PulseAudio.Direction.OUTPUT) {
                 this.default_sink = device;
                 slider.set_value (device.volume);
+                percentage_label.set_label ("%d%%".printf ((int) device.volume));
             }
         }
 

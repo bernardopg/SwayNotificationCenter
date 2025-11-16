@@ -28,6 +28,7 @@ namespace SwayNotificationCenter.Widgets {
         BaseWidget.ButtonType ?type;
         string ?update_command;
         bool ?active;
+        string ?tooltip;
     }
 
     public class Menubar : BaseWidget {

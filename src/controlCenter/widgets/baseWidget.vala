@@ -124,12 +124,16 @@ namespace SwayNotificationCenter.Widgets {
                 bool active =
                     actions.get_object_element (i).get_boolean_member_with_default ("active",
                                                                                     false);
+                string tooltip =
+                    actions.get_object_element (i).get_string_member_with_default ("tooltip",
+                                                                                   "");
                 res[i] = Action () {
                     label = label,
                     command = command,
                     type = type,
                     update_command = update_command,
-                    active = active
+                    active = active,
+                    tooltip = tooltip
                 };
             }
             return res;

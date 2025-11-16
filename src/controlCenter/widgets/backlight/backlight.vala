@@ -12,6 +12,7 @@ namespace SwayNotificationCenter.Widgets {
 
         Gtk.Label label_widget = new Gtk.Label (null);
         Gtk.Scale slider = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 100, 1);
+        Gtk.Label percentage_label = new Gtk.Label ("0%");
 
         public Backlight (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
             base (suffix, swaync_daemon, noti_daemon);
@@ -44,9 +45,10 @@ namespace SwayNotificationCenter.Widgets {
 
             this.client.brightness_change.connect ((percent) => {
                 if (percent < 0) { // invalid device path
-                    hide ();
+                    set_visible (false);
                 } else {
                     slider.set_value (percent);
+                    percentage_label.set_label ("%d%%".printf ((int) percent));
                 }
             });
 
@@ -54,12 +56,21 @@ namespace SwayNotificationCenter.Widgets {
             slider.set_round_digits (0);
             slider.set_hexpand (true);
             slider.value_changed.connect (() => {
-                this.client.set_brightness.begin ((float) slider.get_value ());
-                slider.tooltip_text = ((int) slider.get_value ()).to_string ();
+                int percent = (int) slider.get_value ();
+                this.client.set_brightness.begin ((float) percent);
+                slider.tooltip_text = percent.to_string ();
+                percentage_label.set_label ("%d%%".printf (percent));
             });
 
-            append (label_widget);
-            append (slider);
+            percentage_label.add_css_class ("percentage-label");
+            percentage_label.set_width_chars (4);
+            percentage_label.set_xalign (1.0f);
+
+            Gtk.Box container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            container.append (label_widget);
+            container.append (slider);
+            container.append (percentage_label);
+            append (container);
         }
 
         public override void on_cc_visibility_change (bool val) {

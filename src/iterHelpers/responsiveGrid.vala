@@ -44,7 +44,7 @@ public class ResponsiveGrid : Gtk.Grid {
     private void on_width_changed () {
         if (!responsive) return;
 
-        int width = get_allocated_width ();
+        int width = get_width ();
         int new_columns = calculate_columns_for_width (width);
 
         if (new_columns != columns) {

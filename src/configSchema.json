@@ -585,7 +585,24 @@
             "properties": {
                 "buttons-per-row": {
                     "type": "number",
-                    "description": "How many buttons should be shown in a buttons-grid row"
+                    "description": "How many buttons should be shown in a buttons-grid row. Ignored if responsive is true."
+                },
+                "responsive": {
+                    "type": "boolean",
+                    "description": "Enable responsive layout that automatically adjusts buttons-per-row based on control center width",
+                    "default": false
+                },
+                "button-width": {
+                    "type": "number",
+                    "description": "Minimum width of each button in pixels for responsive mode",
+                    "default": 100,
+                    "minimum": 50
+                },
+                "button-height": {
+                    "type": "number",
+                    "description": "Height of buttons in pixels. -1 for auto",
+                    "default": -1,
+                    "minimum": -1
                 },
                 "actions": {
                     "type": "array",
@@ -618,6 +635,11 @@
                                 "type": "boolean",
                                 "description": "Whether the toggle button is active as default or not",
                                 "default": false
+                            },
+                            "tooltip": {
+                                "type": "string",
+                                "description": "Tooltip text to display when hovering over the button",
+                                "default": ""
                             }
                         }
                     }

@@ -16,36 +16,45 @@ theme might require extra tweaks to the default CSS style file*
 
 ## Demo
 
-https://github.com/user-attachments/assets/5c054ac3-90bb-483e-a8f2-5af191805f04
+<https://github.com/user-attachments/assets/5c054ac3-90bb-483e-a8f2-5af191805f04>
 
 ## Table of Contents
 
-  * [Want to show off your sick config?](#want-to-show-off-your-sick-config)
-  * [Features](#features)
-  * [Available Widgets](#available-widgets)
-  * [Planned Features](#planned-features)
-  * [Install](#install)
-     * [Arch](#arch)
-     * [Fedora](#fedora)
-     * [Fedora Silverblue (and other rpm-ostree variants)](#fedora-silverblue-and-other-rpm-ostree-variants)
-     * [Gentoo](#gentoo)
-     * [OpenSUSE Tumbleweed](#opensuse-tumbleweed)
-     * [Ubuntu](#ubuntu)
-     * [Debian](#debian)
-     * [Guix](#guix)
-     * [rde](#rde)
-     * [Other](#other)
-  * [Sway Usage](#sway-usage)
-  * [Run](#run)
-  * [Control Center Shortcuts](#control-center-shortcuts)
-  * [Configuring](#configuring)
-    * [Toggle Buttons](#toggle-buttons)
-  * [Notification Inhibition](#notification-inhibition)
-  * [Scripting](#scripting)
-     * [Disable scripting](#disable-scripting)
-  * [i3status-rs Example](#i3status-rs-example)
-  * [Waybar Example](#waybar-example)
-  * [Debugging Environment Variables](#debugging-environment-variables)
+- [SwayNotificationCenter](#swaynotificationcenter)
+  - [Demo](#demo)
+  - [Table of Contents](#table-of-contents)
+  - [Want to show off your sick config?](#want-to-show-off-your-sick-config)
+  - [Features](#features)
+  - [Available Widgets](#available-widgets)
+  - [Recent Additions](#recent-additions)
+    - [Widget Enhancements](#widget-enhancements)
+    - [GTK 4.18+ Upgrade](#gtk-418-upgrade)
+  - [Planned Features](#planned-features)
+  - [Install](#install)
+    - [Alpine Linux](#alpine-linux)
+    - [Arch](#arch)
+    - [Fedora](#fedora)
+    - [Fedora Silverblue (and other rpm-ostree variants)](#fedora-silverblue-and-other-rpm-ostree-variants)
+    - [Gentoo](#gentoo)
+    - [OpenSUSE Tumbleweed](#opensuse-tumbleweed)
+    - [Ubuntu](#ubuntu)
+    - [Debian](#debian)
+    - [Guix](#guix)
+    - [rde](#rde)
+    - [Other](#other)
+      - [Dependencies](#dependencies)
+        - [Optional Dependencies](#optional-dependencies)
+  - [Sway Usage](#sway-usage)
+  - [Run](#run)
+  - [Control Center Shortcuts](#control-center-shortcuts)
+  - [Configuring](#configuring)
+  - [Toggle Buttons](#toggle-buttons)
+  - [Notification Inhibition](#notification-inhibition)
+  - [Scripting](#scripting)
+    - [Disable scripting](#disable-scripting)
+  - [i3status-rs Example](#i3status-rs-example)
+  - [Waybar Example](#waybar-example)
+  - [Debugging Environment Variables](#debugging-environment-variables)
 
 ## Want to show off your sick config?
 
@@ -93,10 +102,31 @@ These widgets can be customized, added, removed and even reordered
 - Notifications (Will always be visible)
 - Label
 - Mpris (Media player controls for Spotify, Firefox, Chrome, etc...)
+  - Customizable element visibility (album art, shuffle, repeat buttons)
+  - Support for multiple album art display modes
 - Menubar with dropdown and buttons
+  - Support for tooltips on buttons
 - Button grid
+  - Responsive layout with automatic column adjustment
+  - Customizable button dimensions and tooltips
 - Volume slider using PulseAudio
+  - Percentage label display
 - Backlight slider
+  - Percentage label display
+
+## Recent Additions
+
+### Widget Enhancements
+
+- **MPRIS Widget**: Granular control over UI elements (album art, shuffle/repeat buttons, title/subtitle)
+- **Button Grid**: Responsive layout with automatic column calculation based on control center width
+- **Volume & Backlight**: Visual percentage labels for better user feedback
+- **Tooltips**: Support for custom tooltips on buttons and actions
+
+### GTK 4.18+ Upgrade
+
+This version requires GTK 4.18+ and libadwaita 1.8+ for improved performance and modern API support.
+See [GTK-4.18-UPGRADE.md](GTK-4.18-UPGRADE.md) for details on compatibility and changes.
 
 ## Planned Features
 
@@ -134,7 +164,7 @@ dnf install SwayNotificationCenter-git
 The package can be layered over the base image after adding the Copr repo as an ostree repo:
 
 ```zsh
-sudo curl -sL -o /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:erikreider:SwayNotificationCenter.repo https://copr.fedorainfracloud.org/coprs/erikreider/SwayNotificationCenter/repo/fedora-$(rpm -E %fedora)/erikreider-SwayNotificationCenter-fedora-$(rpm -E %fedora).repo 
+sudo curl -sL -o /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:erikreider:SwayNotificationCenter.repo https://copr.fedorainfracloud.org/coprs/erikreider/SwayNotificationCenter/repo/fedora-$(rpm -E %fedora)/erikreider-SwayNotificationCenter-fedora-$(rpm -E %fedora).repo
 rpm-ostree install SwayNotificationCenter
 ```
 
@@ -199,14 +229,14 @@ But we recommend to use [Guix Home](https://guix.gnu.org/manual/devel/en/html_no
 - `git`
 - `scdoc`
 - `sassc`
-- `gtk4`
+- `gtk4 >= 4.18.0`
 - `gtk4-layer-shell`
 - `dbus`
 - `glib2`
 - `gobject-introspection`
 - `libgee`
 - `json-glib`
-- `libadwaita`
+- `libadwaita >= 1.8.0`
 - `gvfs`
 - `granite7`
 

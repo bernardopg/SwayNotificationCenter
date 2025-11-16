@@ -103,6 +103,7 @@ namespace SwayNotificationCenter {
             if (!skip_packaged_css) {
                 message ("Loading CSS: \"%s\"", system_css);
                 system_css_provider.load_from_path (system_css);
+                // Using StyleContext for global CSS - no direct GTK 4.18+ replacement
                 Gtk.StyleContext.add_provider_for_display (
                     Gdk.Display.get_default (),
                     system_css_provider,
@@ -116,6 +117,7 @@ namespace SwayNotificationCenter {
             user_css = File.new_for_path (user_css).get_path () ?? user_css;
             message ("Loading CSS: \"%s\"", user_css);
             user_css_provider.load_from_path (user_css);
+            // Using StyleContext for global CSS - no direct GTK 4.18+ replacement
             Gtk.StyleContext.add_provider_for_display (
                 Gdk.Display.get_default (),
                 user_css_provider,
