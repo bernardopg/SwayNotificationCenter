@@ -6,6 +6,9 @@ namespace SwayNotificationCenter {
         [GtkChild]
         unowned IterBox box;
 
+        private Gtk.Widget widget_container;
+        private ResponsiveGrid ?grid = null;
+
         private unowned Widgets.Notifications notifications;
 
         private Gtk.GestureClick blank_window_gesture;
@@ -128,6 +131,7 @@ namespace SwayNotificationCenter {
             key_controller.key_released.connect (key_released_event_cb);
             key_controller.key_pressed.connect (key_press_event_cb);
 
+            setup_widget_container ();
             add_widgets ();
 
             // Change output on config reload
@@ -139,7 +143,45 @@ namespace SwayNotificationCenter {
                     this.monitor_name = null;
                     set_anchor ();
                 }
+
+                // Rebuild container if columns or responsive setting changed
+                if (old == null
+                    || old.control_center_columns != config.control_center_columns
+                    || old.control_center_responsive != config.control_center_responsive) {
+                    setup_widget_container ();
+                    add_widgets ();
+                }
             });
+        }
+
+        private void setup_widget_container () {
+            int columns = ConfigModel.instance.control_center_columns;
+            bool responsive = ConfigModel.instance.control_center_responsive;
+
+            // Remove existing grid if present
+            if (grid != null && grid.get_parent () != null) {
+                Gtk.Viewport ?viewport = (Gtk.Viewport) box.get_parent ();
+                if (viewport != null) {
+                    viewport.set_child (box);
+                }
+            }
+
+            if (columns > 1 || responsive) {
+                // Use grid layout
+                grid = new ResponsiveGrid (columns, responsive);
+                grid.set_vexpand (true);
+                grid.add_css_class ("widgets");
+
+                Gtk.Viewport ?viewport = (Gtk.Viewport) box.get_parent ();
+                if (viewport != null) {
+                    viewport.set_child (grid);
+                }
+                widget_container = grid;
+            } else {
+                // Use default box layout
+                grid = null;
+                widget_container = box;
+            }
         }
 
         private void key_released_event_cb (uint keyval, uint keycode, Gdk.ModifierType state) {
@@ -180,10 +222,12 @@ namespace SwayNotificationCenter {
 
         /** Adds all custom widgets. Removes previous widgets */
         public void add_widgets () {
-            // Remove all widgets
+            // Remove all widgets from both containers
             widgets.foreach ((widget) => {
                 if (widget.get_parent () == box) {
                     box.remove (widget);
+                } else if (grid != null && widget.get_parent () == grid) {
+                    grid.remove (widget);
                 }
                 // Except for notifications. Otherwise we'd loose notifications
                 if (widget is Widgets.Notifications) {
@@ -220,8 +264,12 @@ namespace SwayNotificationCenter {
 
                     notifications.reload_config ();
 
-                    // Append the notifications widget to the box in the order of the provided list
-                    box.append (notifications);
+                    // Append to the appropriate container
+                    if (grid != null) {
+                        grid.append (notifications);
+                    } else {
+                        box.append (notifications);
+                    }
                     continue;
                 }
                 if (widget == null) {
@@ -232,7 +280,13 @@ namespace SwayNotificationCenter {
                 widgets.append (widget);
 
                 unowned Widgets.BaseWidget cloned_widget = widgets.last ().data;
-                box.append (cloned_widget);
+
+                // Append to the appropriate container
+                if (grid != null) {
+                    grid.append (cloned_widget);
+                } else {
+                    box.append (cloned_widget);
+                }
             }
         }
 

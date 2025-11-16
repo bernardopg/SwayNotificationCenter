@@ -825,6 +825,18 @@ namespace SwayNotificationCenter {
         public string control_center_preferred_output { get; set; default = ""; }
 
         /**
+         * Number of columns for widget layout in the control center.
+         * Set to 1 for vertical layout, 2+ for grid layout.
+         */
+        public int control_center_columns { get; set; default = 1; }
+
+        /**
+         * Enable responsive layout that automatically adjusts columns
+         * based on control center width
+         */
+        public bool control_center_responsive { get; set; default = false; }
+
+        /**
          * If each notification should display a 'COPY \"1234\"' action
          */
         public bool notification_2fa_action { get; set; default = true; }

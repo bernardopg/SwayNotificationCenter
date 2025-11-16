@@ -58,6 +58,7 @@ app_sources = [
   'animatedList/animatedListItem.vala',
   'orderedHashTable/orderedHashTable.vala',
   'iterHelpers/iterBox.vala',
+  'iterHelpers/responsiveGrid.vala',
   'iterHelpers/iterListBoxController.vala',
   'underlay/underlay.vala',
   'configModel/configModel.vala',

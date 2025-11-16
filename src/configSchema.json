@@ -169,6 +169,18 @@
             "default": 500,
             "minimum": 300
         },
+        "control-center-columns": {
+            "type": "integer",
+            "description": "Number of columns for widget layout in the control center. Set to 1 for vertical layout, 2+ for grid layout.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 4
+        },
+        "control-center-responsive": {
+            "type": "boolean",
+            "description": "Enable responsive layout that automatically adjusts columns based on control center width",
+            "default": false
+        },
         "control-center-preferred-output": {
             "type": "string",
             "description": "The preferred output to open the control center. Can either be the monitor connector name (ex: \"DP-1\"), or the full name, manufacturer model serial (ex: \"Acer Technologies XV272U V 503023B314202\"). If the output is not found, the currently focused one is picked"
