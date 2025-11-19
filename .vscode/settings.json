@@ -1,0 +1,15 @@
+{
+    // Ignore GTK @define-color for Stylelint
+    "stylelint.rules": {
+        "at-rule-no-unknown": [
+            true,
+            {
+                "ignoreAtRules": ["define-color"]
+            }
+        ]
+    },
+
+    // Attempt to silence the built-in SCSS/CSS linters (some extensions respect these)
+    "scss.lint.unknownAtRules": "ignore",
+    "css.lint.unknownAtRules": "ignore"
+}
