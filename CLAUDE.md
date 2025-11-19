@@ -25,6 +25,7 @@ meson setup build -Dpulse-audio=false -Dscripting=false
 ```
 
 ### Available Build Options (meson_options.txt)
+
 - `systemd-service`: Install systemd user service unit (default: true)
 - `scripting`: Enable notification scripting (default: true)
 - `pulse-audio`: Provide PulseAudio Widget (default: true)
@@ -65,19 +66,22 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 
 ### Core Components
 
-**Main Application (main.vala)**
+### Main Application (main.vala)
+
 - Entry point: `Swaync` class extends `Gtk.Application`
 - Application ID: `org.erikreider.swaync`
 - Ensures single instance via DBus registration
 - Initializes monitors, loads CSS, creates daemon
 
 **SwayncDaemon (swayncDaemon/swayncDaemon.vala)**
+
 - DBus interface: `org.erikreider.swaync.cc`
 - Manages notification inhibitors and blank windows
 - Controls layer shell usage and layer-on-demand support
 - Owns the NotiDaemon instance
 
 **NotiDaemon (notiDaemon/notiDaemon.vala)**
+
 - DBus interface: `org.freedesktop.Notifications` (freedesktop.org spec)
 - Implements the freedesktop notification specification
 - Manages Do Not Disturb state (persisted to GSettings)
@@ -85,6 +89,7 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 - Handles notification creation, closing, and actions
 
 **Client (client.vala)**
+
 - Command-line tool for controlling the daemon via DBus
 - Implements all user-facing commands (toggle, reload, DND, etc.)
 - See `swaync-client --help` for full command list
@@ -92,18 +97,21 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 ### Window Components
 
 **ControlCenter (controlCenter/controlCenter.vala)**
+
 - Main notification panel window
 - Uses gtk4-layer-shell for Wayland layer shell positioning
 - Contains customizable widgets (loaded from config)
 - Handles keyboard shortcuts and visibility management
 
 **NotificationWindow (notificationWindow/notificationWindow.vala)**
+
 - Singleton window for popup notifications
 - Uses gtk4-layer-shell for positioning
 - Contains AnimatedList of notification widgets
 - Auto-hides based on config and user interaction
 
 **Notification (notification/notification.vala)**
+
 - Individual notification widget (used in both popup and control center)
 - Supports inline replies, actions, images, MPRIS controls
 - Implements swipe-to-dismiss gesture
@@ -112,17 +120,20 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 ### Widget System
 
 **BaseWidget (controlCenter/widgets/baseWidget.vala)**
+
 - Abstract base class for all control center widgets
 - Provides config parsing utilities (`get_prop`, `get_prop_array`, `parse_actions`)
 - Handles CSS classes and widget lifecycle
 - All widgets have a `widget_name` and optional `suffix` for multiple instances
 
 **Widget Factory (controlCenter/widgets/factory.vala)**
+
 - `get_widget_from_key()`: Creates widgets from config keys
 - Supported widgets: title, dnd, notifications, label, mpris, menubar, buttons-grid, slider, volume (if HAVE_PULSE_AUDIO), backlight, inhibitors
 - Widget keys can include suffix: `"mpris#1"` creates widget with key "mpris" and suffix "1"
 
 **Available Widgets:**
+
 - **Notifications**: Always visible, displays notification list
 - **Title**: Shows title text
 - **Dnd**: Do Not Disturb toggle
@@ -136,6 +147,7 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 - **Inhibitors**: Display and manage notification inhibitors
 
 Toggle buttons (in menubar/buttons-grid) support state commands:
+
 - `active`: Initial state
 - `command`: Command to run (receives `$SWAYNC_TOGGLE_STATE` env var)
 - `update-command`: Command to check current state (should echo "true" or "false")
@@ -143,6 +155,7 @@ Toggle buttons (in menubar/buttons-grid) support state commands:
 ### Configuration
 
 **ConfigModel (configModel/configModel.vala)**
+
 - Singleton: `ConfigModel.instance`
 - Loads from: `~/.config/swaync/config.json` or `/etc/xdg/swaync/config.json`
 - Schema validation against `configSchema.json`
@@ -150,6 +163,7 @@ Toggle buttons (in menubar/buttons-grid) support state commands:
 - Contains widget configuration, notification settings, positioning, scripting rules, etc.
 
 **CSS Styling:**
+
 - Main file: `~/.config/swaync/style.css` or `/etc/xdg/swaync/style.css`
 - Source SCSS files in `data/style/` (use `sassc` to compile)
 - Reload CSS without restart: `swaync-client -rs`
@@ -158,14 +172,17 @@ Toggle buttons (in menubar/buttons-grid) support state commands:
 ### Helper Structures
 
 **OrderedHashTable (orderedHashTable/orderedHashTable.vala)**
+
 - Hash table that maintains insertion order
 - Used for widget configuration storage
 
 **AnimatedList (animatedList/animatedList.vala)**
+
 - Animated Gtk.ListBox with smooth add/remove transitions
 - Used in NotificationWindow for notification animations
 
 **NotificationGroup (notificationGroup/notificationGroup.vala)**
+
 - Groups notifications by app name
 - Supports expandable/collapsible groups
 - Performance optimizations for large notification groups (lazy rendering)
@@ -173,6 +190,7 @@ Toggle buttons (in menubar/buttons-grid) support state commands:
 ## UI Files
 
 UI layouts defined in Blueprint (.blp) format in `data/ui/`:
+
 - `control_center.blp`: Control center layout
 - `notification_window.blp`: Popup notification window layout
 - `notification.blp`: Individual notification widget layout
@@ -184,6 +202,7 @@ Blueprint files are compiled to GTK .ui files during build via blueprint-compile
 ## Scripting System
 
 When enabled (default), notifications can trigger shell scripts based on:
+
 - `app-name`: Notification app name (regex)
 - `summary`: Notification summary (regex)
 - `body`: Notification body (regex)
@@ -197,10 +216,12 @@ Disable scripting: `meson setup build -Dscripting=false`
 ## DBus Interfaces
 
 **Notification Daemon: org.freedesktop.Notifications**
+
 - Standard freedesktop notification spec implementation
 - Methods: Notify, CloseNotification, GetCapabilities, GetServerInformation
 
 **Control Center: org.erikreider.swaync.cc**
+
 - Custom swaync control interface
 - Methods: reload_config, reload_css, toggle_visibility, toggle_dnd, close_all_notifications, etc.
 - Signals: subscribe_v2 (notification count, dnd state, visibility, inhibited status)
@@ -209,6 +230,7 @@ Disable scripting: `meson setup build -Dscripting=false`
 ## Conditional Compilation
 
 Uses Vala preprocessor directives:
+
 - `#if HAVE_PULSE_AUDIO`: Volume widget and PulseAudio support
 - `#if WANT_SCRIPTING`: Notification scripting support
 
@@ -267,6 +289,7 @@ Json.Array actions = get_prop_array(config, "actions");
 ### Widget CSS Classes
 
 Widgets automatically get CSS classes:
+
 - `.widget`: All widgets
 - `.widget-{widget_name}`: Widget-specific class (e.g. `.widget-mpris`)
 - `.{suffix}`: If widget has suffix (e.g. `mpris#spotify` gets `.spotify` class)

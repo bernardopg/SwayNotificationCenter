@@ -73,7 +73,7 @@ mv /tmp/config_new.json ~/.config/swaync/config.json
 swaync-client --reload-config
 ```
 
-**Modo Completo:**
+**Complete Mode:**
 
 ```bash
 jq '.["widget-config"]["mpris"] = {
@@ -97,7 +97,7 @@ Play music in any MPRIS player:
 spotify &
 
 # VLC
-vlc ~/Música/exemplo.mp3 &
+vlc ~/Music/example.mp3 &
 
 # Chromium/Chrome (YouTube Music)
 chromium --app=https://music.youtube.com &
@@ -201,21 +201,21 @@ killall swaync
 G_MESSAGES_DEBUG=all swaync
 ```
 
-## Resultado Esperado
+## Expected Result
 
-Com `show-shuffle: false` e `show-repeat: false`, você deve ver:
+With `show-shuffle: false` and `show-repeat: false`, you should see:
 
-- Apenas os botões: **⏮️ Anterior** | **⏯️ Play/Pause** | **⏭️ Próximo**
-- Sem botões de shuffle (🔀) e repeat (🔁)
+- Only the buttons: **⏮️ Previous** | **⏯️ Play/Pause** | **⏭️ Next**
+- No shuffle (🔀) and repeat (🔁) buttons
 
-Se `show-album-art: "never"`:
+If `show-album-art: "never"`:
 
-- Nenhuma imagem/ícone será exibido
+- No image/icon will be displayed
 
-## Próximos Passos
+## Next Steps
 
-Para personalizar ainda mais, consulte:
+For further customization, see:
 
-- `MPRIS-CUSTOMIZATION.md` - Documentação completa
-- `mpris-config-example.json` - Template com todas as opções
-- `/etc/xdg/swaync/configSchema.json` - Schema completo
+- `MPRIS-CUSTOMIZATION.md` - Complete documentation
+- `mpris-config-example.json` - Template with all options
+- `/etc/xdg/swaync/configSchema.json` - Complete schema

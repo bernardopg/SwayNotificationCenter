@@ -195,33 +195,33 @@ swaync-client --reload-config
 
 | Feature | Status |
 |---------------|--------|
-| ✅ `show-album-art` | **Funcional** |
-| ✅ `show-title` | **Funcional** |
-| ✅ `show-subtitle` | **Funcional** |
-| ✅ `show-background` | **Funcional** |
-| ✅ `show-shuffle` | **Funcional** |
-| ✅ `show-repeat` | **Funcional** |
-| ⚠️ `show-favorite` | **Placeholder** (botão não existe no código original) |
-| ⚠️ `compact-mode` | **Placeholder** (requer modificações no layout do .blp) |
-| ⚠️ `button-size` | **Placeholder** (requer aplicação dinâmica de pixel-size) |
+| ✅ `show-album-art` | **Functional** |
+| ✅ `show-title` | **Functional** |
+| ✅ `show-subtitle` | **Functional** |
+| ✅ `show-background` | **Functional** |
+| ✅ `show-shuffle` | **Functional** |
+| ✅ `show-repeat` | **Functional** |
+| ⚠️ `show-favorite` | **Placeholder** (button doesn't exist in original code) |
+| ⚠️ `compact-mode` | **Placeholder** (requires .blp layout modifications) |
+| ⚠️ `button-size` | **Placeholder** (requires dynamic pixel-size application) |
 
 ---
 
-## Próximos Passos (Opcional)
+## Next Steps (Optional)
 
-1. **Implementar `button-size`**: Aplicar `set_pixel_size()` nos botões dinamicamente
-2. **Implementar `compact-mode`**: Criar layout alternativo no `.blp` com orientação horizontal
-3. **Adicionar `show-favorite`**: Criar botão de favorito/coração se o player suportar
+1. **Implement `button-size`**: Apply `set_pixel_size()` to buttons dynamically
+2. **Implement `compact-mode`**: Create alternative layout in `.blp` with horizontal orientation
+3. **Add `show-favorite`**: Create favorite/heart button if player supports it
 
 ---
 
-## Créditos
+## Credits
 
 - **SwayNotificationCenter Original**: [ErikReider/SwayNotificationCenter](https://github.com/ErikReider/SwayNotificationCenter)
-- **Modificações**: Customização MPRIS ultra-personalizável via JSON
+- **Modifications**: Ultra-customizable MPRIS via JSON
 
 ---
 
-## Licença
+## License
 
-Mesma licença do projeto original (GPL-3.0).
+Same license as the original project (GPL-3.0).

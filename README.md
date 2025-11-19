@@ -1,6 +1,6 @@
 # SwayNotificationCenter
 
-[![Check PKGBUILD builds for Arch.](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/PKGBUILD-build.yml/badge.svg)](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/PKGBUILD-buildd.yml)
+[![Check PKGBUILD builds for Arch.](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/PKGBUILD-build.yml/badge.svg)](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/PKGBUILD-build.yml)
 [![Check build for Fedora.](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/fedora-build.yml/badge.svg)](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/fedora-build.yml)
 [![Check build for latest Ubuntu LTS.](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/ubuntu-build.yml/badge.svg)](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/ubuntu-build.yml)
 [![Linting](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/linting.yml/badge.svg)](https://github.com/ErikReider/SwayNotificationCenter/actions/workflows/linting.yml)
@@ -16,36 +16,42 @@ theme might require extra tweaks to the default CSS style file*
 
 ## Demo
 
-https://github.com/user-attachments/assets/5c054ac3-90bb-483e-a8f2-5af191805f04
+<https://github.com/user-attachments/assets/5c054ac3-90bb-483e-a8f2-5af191805f04>
 
 ## Table of Contents
 
-  * [Want to show off your sick config?](#want-to-show-off-your-sick-config)
-  * [Features](#features)
-  * [Available Widgets](#available-widgets)
-  * [Planned Features](#planned-features)
-  * [Install](#install)
-     * [Arch](#arch)
-     * [Fedora](#fedora)
-     * [Fedora Silverblue (and other rpm-ostree variants)](#fedora-silverblue-and-other-rpm-ostree-variants)
-     * [Gentoo](#gentoo)
-     * [OpenSUSE Tumbleweed](#opensuse-tumbleweed)
-     * [Ubuntu](#ubuntu)
-     * [Debian](#debian)
-     * [Guix](#guix)
-     * [rde](#rde)
-     * [Other](#other)
-  * [Sway Usage](#sway-usage)
-  * [Run](#run)
-  * [Control Center Shortcuts](#control-center-shortcuts)
-  * [Configuring](#configuring)
-    * [Toggle Buttons](#toggle-buttons)
-  * [Notification Inhibition](#notification-inhibition)
-  * [Scripting](#scripting)
-     * [Disable scripting](#disable-scripting)
-  * [i3status-rs Example](#i3status-rs-example)
-  * [Waybar Example](#waybar-example)
-  * [Debugging Environment Variables](#debugging-environment-variables)
+- [SwayNotificationCenter](#swaynotificationcenter)
+  - [Demo](#demo)
+  - [Table of Contents](#table-of-contents)
+  - [Want to show off your sick config?](#want-to-show-off-your-sick-config)
+  - [Features](#features)
+  - [Available Widgets](#available-widgets)
+  - [Planned Features](#planned-features)
+  - [Install](#install)
+    - [Alpine Linux](#alpine-linux)
+    - [Arch](#arch)
+    - [Fedora](#fedora)
+    - [Fedora Silverblue (and other rpm-ostree variants)](#fedora-silverblue-and-other-rpm-ostree-variants)
+    - [Gentoo](#gentoo)
+    - [OpenSUSE Tumbleweed](#opensuse-tumbleweed)
+    - [Ubuntu](#ubuntu)
+    - [Debian](#debian)
+    - [Guix](#guix)
+    - [rde](#rde)
+    - [Other](#other)
+      - [Dependencies](#dependencies)
+        - [Optional Dependencies](#optional-dependencies)
+  - [Sway Usage](#sway-usage)
+  - [Run](#run)
+  - [Control Center Shortcuts](#control-center-shortcuts)
+  - [Configuring](#configuring)
+  - [Toggle Buttons](#toggle-buttons)
+  - [Notification Inhibition](#notification-inhibition)
+  - [Scripting](#scripting)
+    - [Disable scripting](#disable-scripting)
+  - [i3status-rs Example](#i3status-rs-example)
+  - [Waybar Example](#waybar-example)
+  - [Debugging Environment Variables](#debugging-environment-variables)
 
 ## Want to show off your sick config?
 
@@ -108,7 +114,7 @@ These widgets can be customized, added, removed and even reordered
 
 ```zsh
 apk add swaync
-````
+```
 
 ### Arch
 
@@ -134,7 +140,7 @@ dnf install SwayNotificationCenter-git
 The package can be layered over the base image after adding the Copr repo as an ostree repo:
 
 ```zsh
-sudo curl -sL -o /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:erikreider:SwayNotificationCenter.repo https://copr.fedorainfracloud.org/coprs/erikreider/SwayNotificationCenter/repo/fedora-$(rpm -E %fedora)/erikreider-SwayNotificationCenter-fedora-$(rpm -E %fedora).repo 
+sudo curl -sL -o /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:erikreider:SwayNotificationCenter.repo https://copr.fedorainfracloud.org/coprs/erikreider/SwayNotificationCenter/repo/fedora-$(rpm -E %fedora)/erikreider-SwayNotificationCenter-fedora-$(rpm -E %fedora).repo
 rpm-ostree install SwayNotificationCenter
 ```
 
@@ -321,7 +327,7 @@ or through the DBus interface `org.erikreider.swaync.cc`.
 Here's an example of notification inhibition while screen sharing through
 `xdg-desktop-portal-wlr`
 
-```conf
+```ini
 # xdg-desktop-portal-wlr config
 [screencast]
 exec_before=swaync-client --inhibitor-add "xdg-desktop-portal-wlr"
@@ -332,14 +338,12 @@ exec_after=swaync-client --inhibitor-remove "xdg-desktop-portal-wlr"
 
 Scripting rules and logic:
 
-. <b>Only one</b> script can be fired per notification
-. Each script requires `exec` and at least one of the other properties
-. All listed properties must match the notification for the script to be ran
-. If any of the properties doesn't match, the script will be skipped
-. If a notification doesn't include one of the properties, that property will
-be skipped
-· If a script has `run-on` set to `action`, the script will only run when an
-action is taken on the notification
+- **Only one** script can be fired per notification
+- Each script requires `exec` and at least one of the other properties
+- All listed properties must match the notification for the script to be ran
+- If any of the properties doesn't match, the script will be skipped
+- If a notification doesn't include one of the properties, that property will be skipped
+- If a script has `run-on` set to `action`, the script will only run when an action is taken on the notification
 
 More information can be found in the `swaync(5)` man page
 
@@ -467,4 +471,4 @@ Alternatively, the number of notifications can be shown by adding `{0}` anywhere
 - `G_DEBUG=fatal_criticals` or `G_DEBUG=fatal_warnings`: Causes GLib to abort
   the program at the first call to g_warning() or g_critical().
 
-More can be read [here](https://www.manpagez.com/html/glib/glib-2.56.0/glib-running.php)
+More can be read in the [GLib running programs documentation](https://www.manpagez.com/html/glib/glib-2.56.0/glib-running.php)

@@ -421,12 +421,14 @@ config file to be able to detect config errors
 					optional: true ++
 					default: "Label Text" ++
 					description: The text content of the widget ++
-				clear-all-button: ++
+				max-lines: ++
 					type: integer ++
 					optional: true ++
 					default: 5 ++
 					description: The maximum lines ++
-			description: A generic widget that allows the user to add custom text. ++
+			description: A generic widget that allows the user to add custom text for ++
+					the main Control Center title. This widget is optional and ++
+					can be removed from the widgets array to save vertical space. ++
 		*mpris*++
 			type: object ++
 			css classes: ++

@@ -1,19 +1,19 @@
 # TODO – GTK4 Control Center UX / configuration
 
 Repository: local fork at `~/git-clones/SwayNotificationCenter`.
-This file documents planned UX/config work only; it does **not** reflect implemented features.
+This file documents planned UX/config work only; it does not reflect implemented features.
 
-## 1. Optional “Control Center” title
+## 1. Optional "Control Center" title
 
-**Context**
+### Context
 
-- The main “Control Center” header is provided by the `label` widget in the user config (`widgets: ["label", …]`), not hard-coded.
+- The main "Control Center" header is provided by the `label` widget in the user config (`widgets: ["label", …]`), not hard-coded.
 - The shipped default config (`src/config.json.in`) only enables `inhibitors`, `title`, `dnd`, `notifications`, but the `label` widget is available for themes that want an extra header.
 
-**Tasks**
+### Tasks
 
-- [ ] Clarify in `man/swaync.5.scd` / docs that `label` is optional and can be removed from `widgets` to save vertical space.
-- [ ] Revisit `src/config.json.in` and ensure the default configuration does not add a redundant “Control Center” title.
+- [x] Clarify in `man/swaync.5.scd` / docs that `label` is optional and can be removed from `widgets` to save vertical space.
+- [x] Revisit `src/config.json.in` and ensure the default configuration does not add a redundant "Control Center" title.
 - [ ] (Optional) Add a top-level boolean such as `"control-center-show-main-label"` to `src/configSchema.json`:
   - Define schema, default, and description.
   - Make the control-center layout builder respect this flag when deciding whether to render a top header.
@@ -22,12 +22,12 @@ This file documents planned UX/config work only; it does **not** reflect impleme
 
 ## 2. DND pill switch with icon-only option
 
-**Context**
+### Context: DND pill switch with icon-only option
 
 - The DND widget is defined in `src/config.json.in` / `src/configSchema.json` and rendered as `label + Gtk.Switch`, styled by `data/style/widgets/dnd.scss`.
 - Goal: compact, Waybar-like DND control: wide pill, icon-based, with text available via tooltip instead of inline label.
 
-**Tasks**
+### Tasks
 
 - [ ] Redesign `.widget-dnd switch` in `data/style/widgets/dnd.scss`:
   - Pill-shaped background, clear on/off colors, small vertical footprint.
@@ -43,12 +43,12 @@ This file documents planned UX/config work only; it does **not** reflect impleme
 
 ## 3. Optional / removable widget section headers
 
-**Context**
+### Context: Optional / removable widget section headers (Section 3)
 
 - Section headers such as “Notifications” and “Inhibitors” come from the `title` and `inhibitors` widgets (`src/config.json.in`, `src/configSchema.json`), styled via `.widget-title` / `.widget-label`.
 - On compact sidebars these headers can feel redundant and consume vertical space.
 
-**Tasks**
+### Tasks
 
 - [ ] Design configuration for hiding headers:
   - Per-widget flags like `widget-config.title.show-header` / `widget-config.inhibitors.show-header`, and/or
@@ -59,12 +59,12 @@ This file documents planned UX/config work only; it does **not** reflect impleme
 
 ## 4. Compact, configurable notification group headers
 
-**Context**
+### Context: Compact, configurable notification group headers (Section 4)
 
 - Per-app grouping is implemented in `src/notificationGroup/notificationGroup.vala` and styled in `data/style/style.scss` under `.notification-group`, `.notification-group-header`, `.notification-group-buttons`, etc.
 - Current headers (app icon + name + collapse/close-all buttons) are relatively tall for a compact control center.
 
-**Tasks**
+### Tasks
 
 - [ ] Introduce CSS variables or explicit classes for a denser header, e.g.
   - `--notification-group-header-font-size`
@@ -79,13 +79,13 @@ This file documents planned UX/config work only; it does **not** reflect impleme
 
 ## 5. Extended `buttons-grid` widget actions (icons, multi-click, tooltips, translations)
 
-**Context**
+### Context: Extended `buttons-grid` widget actions (icons, multi-click, tooltips, translations) (Section 5)
 
 - `buttons-grid` is implemented in `src/controlCenter/widgets/buttonsGrid/buttonsGrid.vala`.
 - Generic action parsing lives in `src/controlCenter/widgets/baseWidget.vala` (`Action` + `parse_actions()`), and menubar has its own `Action` in `src/controlCenter/widgets/menubar/menubar.vala`.
 - Current schema (`src/configSchema.json`) supports `label`, `command`, `type`, `update-command`, `active` only.
 
-**Tasks**
+### Tasks
 
 - [ ] Extend `widgets.buttons-grid.properties.actions` in `src/configSchema.json` with optional fields:
   - `icon`
@@ -109,11 +109,11 @@ This file documents planned UX/config work only; it does **not** reflect impleme
 
 ## 6. Documentation and sample configuration updates
 
-**Context**
+### Context: Documentation and sample configuration updates
 
 - All of the above introduce new configuration keys and UX patterns that should be discoverable and easy to copy.
 
-**Tasks**
+### Tasks
 
 - [ ] After implementing each feature, update `man/swaync.5.scd` (and other relevant manpages) with:
   - New keys, allowed values, and defaults.

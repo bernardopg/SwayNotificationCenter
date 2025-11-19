@@ -24,6 +24,7 @@ ninja -C build
 ### Build Options
 
 Available Meson options (from `meson_options.txt`):
+
 - `systemd-service` (default: true) - Install systemd user service
 - `scripting` (default: true) - Enable notification scripting
 - `pulse-audio` (default: true) - Provide PulseAudio widget
@@ -31,6 +32,7 @@ Available Meson options (from `meson_options.txt`):
 - `zsh-completions`, `bash-completions`, `fish-completions` (default: true)
 
 Example: Build without scripting support
+
 ```bash
 meson setup build --prefix=/usr -Dscripting=false
 ninja -C build
@@ -88,12 +90,14 @@ uncrustify -c ./.uncrustify.cfg -l vala $(find . -name "*.vala" -type f) --repla
 ### Core Components
 
 **Entry Point:** `src/main.vala`
+
 - Initializes GTK4 and Libadwaita
 - Loads config via `ConfigModel.init()`
 - Registers custom widget types for Blueprint templates
 - Creates and runs the `Swaync` GTK application
 
 **DBus Services:**
+
 1. `SwayncDaemon` (`src/swayncDaemon/swayncDaemon.vala`)
    - Bus name: `org.erikreider.swaync.cc`
    - Manages control center visibility, DND state, inhibitors
@@ -107,6 +111,7 @@ uncrustify -c ./.uncrustify.cfg -l vala $(find . -name "*.vala" -type f) --repla
    - Handles scripting, visibility rules, DND filtering
 
 **UI Windows:**
+
 - `ControlCenter` (`src/controlCenter/controlCenter.vala`) - Sidebar panel with widgets and notification history
 - `NotificationWindow` (`src/notificationWindow/notificationWindow.vala`) - Popup notification overlays
 - `BlankWindow` (`src/blankWindow/blankWindow.vala`) - Covers non-active monitors when control center is open
@@ -116,6 +121,7 @@ uncrustify -c ./.uncrustify.cfg -l vala $(find . -name "*.vala" -type f) --repla
 Widgets are loaded dynamically via `src/controlCenter/widgets/factory.vala`:
 
 **Available widgets:**
+
 - `title` - Header with text/button
 - `dnd` - Do Not Disturb toggle
 - `notifications` - Notification list (special: always rendered, not instantiated via factory)
@@ -129,6 +135,7 @@ Widgets are loaded dynamically via `src/controlCenter/widgets/factory.vala`:
 - `inhibitors` - Shows active notification inhibitors
 
 **Multiple instances:** Widgets support suffix notation for multiple instances:
+
 ```json
 {
   "widgets": ["mpris#player1", "mpris#player2", "label#status"]
@@ -153,17 +160,20 @@ Widgets are loaded dynamically via `src/controlCenter/widgets/factory.vala`:
 ### Config Files
 
 **System defaults:**
+
 - `/etc/xdg/swaync/config.json` - Default config
 - `/etc/xdg/swaync/configSchema.json` - JSON schema
 - `/etc/xdg/swaync/style.css` - Default styles
 
 **User overrides:**
+
 - `~/.config/swaync/config.json` - User config (takes precedence)
 - `~/.config/swaync/style.css` - User styles (takes precedence)
 
 ### Config Model
 
 The `ConfigModel` singleton (`src/configModel/configModel.vala`) parses JSON config with these key sections:
+
 - `widgets` - Array of widget names to display in control center
 - `widget-config` - Per-widget configuration objects
 - `notification-visibility` - Rules to show/hide/modify notifications (regex matching on app-name, summary, body, etc.)
@@ -183,6 +193,7 @@ swaync-client -rs
 ```
 
 **When restart IS needed:**
+
 - Changing compile-time options (`-Dscripting=false`, `-Dpulse-audio=false`)
 - Modifying `.blp` Blueprint UI templates (requires `meson compile -C build`)
 - Changing `layer_shell` or compositor-specific settings
@@ -192,12 +203,14 @@ swaync-client -rs
 **Compositor requirement:** Requires `wlr_layer_shell_unstable_v1` support (Sway, Hyprland, River, etc.)
 
 **Layer shell usage:**
+
 - Control center uses namespace `swaync-control-center`
 - Notification window uses namespace `swaync-notification-window`
 - Layer, anchors, and margins set via `gtk4-layer-shell-0` library
 - Layer shell properties must be configured before window is mapped (see `controlCenter.vala` constructor)
 
 **Monitor handling:**
+
 - Preferred output configurable via `control_center_preferred_output` and `notification_window_preferred_output` in config
 - Blank windows automatically cover inactive monitors when control center opens (if `layer_shell_cover_screen: true`)
 
@@ -206,6 +219,7 @@ swaync-client -rs
 ### Visibility States
 
 Notifications can have three states (defined in `notification-visibility` config):
+
 - `ENABLED` - Show popup and add to control center
 - `TRANSIENT` - Show popup but don't persist in control center
 - `IGNORED` - Don't show popup or persist
@@ -214,10 +228,12 @@ Notifications can have three states (defined in `notification-visibility` config
 
 - **DND (Do Not Disturb):** Blocks all non-critical notifications
 - **Inhibitors:** External processes can request notification suppression via DBus
+
   ```bash
   swaync-client --inhibitor-add "my-app"
   swaync-client --inhibitor-remove "my-app"
   ```
+
 - **Bypass:** Notifications with urgency `CRITICAL` or hint `swaync-bypass-dnd` always show
 
 ### Synchronous Notifications
@@ -227,6 +243,7 @@ Progress/volume notifications use `synchronous` or `x-canonical-private-synchron
 ### Scripting
 
 Conditional script execution based on notification properties (regex matching):
+
 ```json
 {
   "scripts": {
@@ -241,6 +258,7 @@ Conditional script execution based on notification properties (regex matching):
 ```
 
 **Disable at compile time:**
+
 ```bash
 meson setup build -Dscripting=false
 ```
@@ -267,15 +285,19 @@ meson setup build -Dscripting=false
 
 1. Create widget directory: `src/controlCenter/widgets/mywidget/`
 2. Implement widget class extending `BaseWidget` with constructor signature:
+
    ```vala
    public MyWidget(string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon)
    ```
+
 3. Add case to `src/controlCenter/widgets/factory.vala`:
+
    ```vala
    case "mywidget":
        widget = new MyWidget(suffix, swaync_daemon, noti_daemon);
        break;
    ```
+
 4. Add source to `widget_sources` in `src/meson.build`
 5. Add schema to `configSchema.json` under `widget-config/mywidget`
 6. (Optional) Create Blueprint template in `data/ui/mywidget.blp`
