@@ -90,6 +90,11 @@
             "description": "Whether or not the control center should follow the compositors exclusive zones. An example would be setting it to \"false\" to cover your panel/dock.",
             "default": true
         },
+        "control-center-show-main-label": {
+            "type": "boolean",
+            "description": "Whether to show a main 'Control Center' title at the top of the control center. If false, no main header is shown.",
+            "default": false
+        },
         "notification-2fa-action": {
             "type": "boolean",
             "description": "If each notification should display a 'COPY \"1234\"' action",
@@ -457,6 +462,11 @@
                     "type": "string",
                     "description": "\"Clear All\" button text",
                     "default": "Clear All"
+                },
+                "show-header": {
+                    "type": "boolean",
+                    "description": "Whether to show the header text label. If false, only the clear-all button (if enabled) is displayed. Useful for compact layouts.",
+                    "default": true
                 }
             }
         },
@@ -469,6 +479,11 @@
                     "type": "string",
                     "description": "The title of the widget",
                     "default": "Do Not Disturb"
+                },
+                "show-label": {
+                    "type": "boolean",
+                    "description": "Whether to show the text label. If false, only an icon is displayed with tooltip text.",
+                    "default": true
                 }
             }
         },
@@ -825,6 +840,11 @@
                     "type": "string",
                     "description": "\"Clear All\" button text",
                     "default": "Clear All"
+                },
+                "show-header": {
+                    "type": "boolean",
+                    "description": "Whether to show the header text label. If false, only the clear-all button (if enabled) is displayed. Useful for compact layouts.",
+                    "default": true
                 }
             }
         }

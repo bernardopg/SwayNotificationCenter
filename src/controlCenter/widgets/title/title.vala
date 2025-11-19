@@ -13,6 +13,7 @@ namespace SwayNotificationCenter.Widgets {
         string title = "Notifications";
         bool has_clear_all_button = true;
         string button_text = "Clear All";
+        bool show_header = true;
 
         public Title (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
             base (suffix, swaync_daemon, noti_daemon);
@@ -36,11 +37,23 @@ namespace SwayNotificationCenter.Widgets {
                 if (button_text != null) {
                     this.button_text = button_text;
                 }
+                // Get show-header
+                bool found_show_header;
+                bool ?show_header = get_prop<bool> (config, "show-header", out found_show_header);
+                if (found_show_header) {
+                    this.show_header = show_header;
+                }
+            }
+
+            // Apply no-header CSS class if header is hidden
+            if (!show_header) {
+                add_css_class ("no-header");
             }
 
             title_widget = new Gtk.Label (title);
             title_widget.set_hexpand (true);
             title_widget.set_halign (Gtk.Align.START);
+            title_widget.set_visible (show_header);
             append (title_widget);
 
             if (has_clear_all_button) {

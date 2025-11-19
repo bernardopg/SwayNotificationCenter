@@ -205,6 +205,12 @@ config file to be able to detect config errors
 				 (ex: "Acer Technologies XV272U V 503023B314202"). If the ++
 				 output is not found, the currently focused one is picked.
 
+*control-center-show-main-label* ++
+	type: bool ++
+	default: false ++
+	description: Whether to show a main 'Control Center' title at the top ++
+				 of the control center. If false, no main header is shown.
+
 *notification-action-filter* ++
 	type: object ++
 	visibility object properties: ++
@@ -385,6 +391,7 @@ config file to be able to detect config errors
 		*title*++
 			type: object ++
 			css class: widget-title ++
+			css class (no-header mode): widget-title no-header ++
 			properties: ++
 				text: ++
 					type: string ++
@@ -401,17 +408,35 @@ config file to be able to detect config errors
 					optional: true ++
 					default: "Clear All" ++
 					description: "Clear All" button text ++
-			description: The notification visibility state. ++
+				show-header: ++
+					type: bool ++
+					optional: true ++
+					default: true ++
+					description: Whether to show the header text label. If false, ++
+							only the clear-all button (if enabled) is displayed. ++
+							Useful for compact layouts. Applies the 'no-header' CSS class. ++
+			description: Control Center Title Widget for notifications section. ++
 		*dnd*++
 			type: object ++
 			css class: widget-dnd ++
+			css class (compact mode): widget-dnd compact ++
 			properties: ++
 				text: ++
 					type: string ++
 					optional: true ++
 					default: "Do Not Disturb" ++
 					description: The title of the widget ++
-			description: Control Center Do Not Disturb Widget. ++
+				show-label: ++
+					type: bool ++
+					optional: true ++
+					default: true ++
+					description: Whether to show the text label. If false, only an icon ++
+							is displayed with tooltip text. Compact mode applies ++
+							the 'compact' CSS class for custom styling. ++
+			description: Control Center Do Not Disturb Widget. The widget features a pill-shaped ++
+					toggle switch with hover, focus, and active states. When show-label is ++
+					false, it displays an icon (bell or bell-disabled) that updates based on ++
+					the DND state. ++
 		*label*++
 			type: object ++
 			css class: widget-label ++
@@ -743,6 +768,7 @@ config file to be able to detect config errors
 		*inhibitors*++
 			type: object ++
 			css class: widget-inhibitors ++
+			css class (no-header mode): widget-inhibitors no-header ++
 			properties: ++
 				text: ++
 					type: string ++
@@ -759,7 +785,14 @@ config file to be able to detect config errors
 					optional: true ++
 					default: "Clear All" ++
 					description: "Clear All" button text ++
-			description: Displayed if notifications are inhibited.
+				show-header: ++
+					type: bool ++
+					optional: true ++
+					default: true ++
+					description: Whether to show the header text label. If false, ++
+							only the clear-all button (if enabled) is displayed. ++
+							Useful for compact layouts. Applies the 'no-header' CSS class. ++
+			description: Control Center Inhibitors Widget. Displayed if notifications are inhibited.
 
 	example:
 ```
@@ -768,10 +801,18 @@ config file to be able to detect config errors
 		"title": {
 			"text": "Notifications",
 			"clear-all-button": true,
-			"button-text": "Clear All"
+			"button-text": "Clear All",
+			"show-header": true
 		},
 		"dnd": {
-			"text": "Do Not Disturb"
+			"text": "Do Not Disturb",
+			"show-label": true
+		},
+		"inhibitors": {
+			"text": "Inhibitors",
+			"clear-all-button": true,
+			"button-text": "Clear All",
+			"show-header": true
 		},
 		"label": {
 			"max-lines": 5,

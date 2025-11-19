@@ -735,6 +735,14 @@ namespace SwayNotificationCenter {
             get; set; default = true;
         }
 
+        /**
+         * Whether to show a main 'Control Center' title at the top of the
+         * control center. If false, no main header is shown.
+         */
+        public bool control_center_show_main_label {
+            get; set; default = false;
+        }
+
         /** Categories settings */
         public OrderedHashTable<Category> categories_settings {
             get;

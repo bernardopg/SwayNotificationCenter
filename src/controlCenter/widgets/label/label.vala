@@ -15,6 +15,11 @@ namespace SwayNotificationCenter.Widgets {
         public Label (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
             base (suffix, swaync_daemon, noti_daemon);
 
+            // Special handling for the main Control Center label
+            if (suffix == "main") {
+                this.text = "Control Center";
+            }
+
             Json.Object ?config = get_config (this);
             if (config != null) {
                 // Get text

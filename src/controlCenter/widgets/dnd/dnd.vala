@@ -7,10 +7,12 @@ namespace SwayNotificationCenter.Widgets {
         }
 
         Gtk.Label title_widget;
+        Gtk.Image icon_widget;
         Gtk.Switch dnd_button;
 
         // Default config values
         string title = "Do Not Disturb";
+        bool show_label = true;
 
         public Dnd (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
             base (suffix, swaync_daemon, noti_daemon);
@@ -22,12 +24,29 @@ namespace SwayNotificationCenter.Widgets {
                 if (title != null) {
                     this.title = title;
                 }
+                // Get show-label
+                bool ?show_label = get_prop<bool> (config, "show-label");
+                if (show_label != null) {
+                    this.show_label = show_label;
+                }
             }
+
+            // Apply compact CSS class if label is hidden
+            if (!show_label) {
+                add_css_class ("compact");
+            }
+
+            // Icon (only visible in compact mode)
+            icon_widget = new Gtk.Image.from_icon_name ("notifications-symbolic");
+            icon_widget.set_pixel_size (20);
+            icon_widget.set_visible (!show_label);
+            append (icon_widget);
 
             // Title
             title_widget = new Gtk.Label (title);
             title_widget.set_hexpand (true);
             title_widget.set_halign (Gtk.Align.START);
+            title_widget.set_visible (show_label);
             append (title_widget);
 
             // Dnd button
@@ -39,6 +58,8 @@ namespace SwayNotificationCenter.Widgets {
                 dnd_button.notify["active"].disconnect (switch_active_changed_cb);
                 dnd_button.set_active (dnd);
                 dnd_button.notify["active"].connect (switch_active_changed_cb);
+                // Update icon based on DND state
+                update_icon (dnd);
             });
 
             dnd_button.set_can_focus (false);
@@ -46,6 +67,26 @@ namespace SwayNotificationCenter.Widgets {
             // Backwards compatible towards older CSS stylesheets
             dnd_button.add_css_class ("control-center-dnd");
             append (dnd_button);
+
+            // Set tooltip text (especially useful in compact mode)
+            set_tooltip_text (title);
+
+            // Initialize icon state
+            update_icon (noti_daemon.dnd);
+
+            // Set accessible name for screen readers
+            dnd_button.update_property (
+                Gtk.AccessibleProperty.DESCRIPTION,
+                title,
+                -1
+            );
+        }
+
+        private void update_icon (bool dnd) {
+            if (!show_label) {
+                // Update icon based on DND state
+                icon_widget.set_from_icon_name (dnd ? "notifications-disabled-symbolic" : "notifications-symbolic");
+            }
         }
 
         private void switch_active_changed_cb () {

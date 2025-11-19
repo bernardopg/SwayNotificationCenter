@@ -8,5 +8,16 @@
     margin-left: $margin;
     border-radius: var(--border-radius);
   }
+
+  // No-header mode: header text is hidden, only button remains
+  &.no-header {
+    & > label {
+      display: none;
+    }
+
+    & > button {
+      margin-left: 0;
+    }
+  }
 }
 

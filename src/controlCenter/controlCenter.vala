@@ -197,6 +197,15 @@ namespace SwayNotificationCenter {
                 w = DEFAULT_WIDGETS;
             }
 
+            // Optionally prepend main Control Center label if configured
+            if (ConfigModel.instance.control_center_show_main_label) {
+                string[] new_w = { "label#main" };
+                foreach (string widget_key in w) {
+                    new_w += widget_key;
+                }
+                w = new_w;
+            }
+
             // Add the notifications widget if not found in the list
             if (!("notifications" in w)) {
                 warning ("Notification widget not included in \"widgets\" config. " +
