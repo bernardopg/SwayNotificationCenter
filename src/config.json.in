@@ -77,6 +77,10 @@
       "max-lines": 5,
       "text": "Label Text"
     },
+    "label#main": {
+      "text": "Control Center",
+      "max-lines": 1
+    },
     "mpris": {
       "blacklist": [],
       "autohide": false,

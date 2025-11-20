@@ -3,6 +3,20 @@
 Repository: local fork at `~/git-clones/SwayNotificationCenter`.
 This file documents planned UX/config work only; it does not reflect implemented features.
 
+## Status Summary
+
+✅ **Task 1: COMPLETE** - Optional Control Center title with full configuration support
+✅ **Task 2: COMPLETE** - Compact DND widget with icon-only mode and pill-shaped styling
+🚧 **Tasks 3-6: PENDING** - Additional UX improvements planned
+
+### Documentation
+
+- 📖 [UX Customization Guide](docs/UX-CUSTOMIZATION.md) - Complete guide for all new features
+- 📦 [Example Layouts](examples/compact-layouts/) - Ready-to-use configurations
+  - Minimal Compact
+  - Waybar Style
+  - Traditional Full
+
 ## 1. Optional "Control Center" title
 
 ### Context
@@ -14,11 +28,91 @@ This file documents planned UX/config work only; it does not reflect implemented
 
 - [x] Clarify in `man/swaync.5.scd` / docs that `label` is optional and can be removed from `widgets` to save vertical space.
 - [x] Revisit `src/config.json.in` and ensure the default configuration does not add a redundant "Control Center" title.
-- [ ] (Optional) Add a top-level boolean such as `"control-center-show-main-label"` to `src/configSchema.json`:
+- [x] (Optional) Add a top-level boolean such as `"control-center-show-main-label"` to `src/configSchema.json`:
   - Define schema, default, and description.
   - Make the control-center layout builder respect this flag when deciding whether to render a top header.
   - Keep existing configs working when the key is missing.
-- [ ] Add tests or manual QA notes covering configs with and without the header / new flag.
+- [x] Add tests or manual QA notes covering configs with and without the header / new flag.
+
+### Manual QA Notes for Task 1
+
+#### Implementation Summary
+
+- Added `control-center-show-main-label` boolean to [configSchema.json](src/configSchema.json#L93-L97) with default value `false`
+- Property defined in [configModel.vala](src/configModel/configModel.vala#L742-L744)
+- Control center implementation in [controlCenter.vala](src/controlCenter/controlCenter.vala#L201-L207) prepends `label#main` widget when flag is `true`
+- Default config for `label#main` widget added to [config.json.in](src/config.json.in#L80-L83) with text "Control Center"
+
+#### Test Cases
+
+**Test 1: Default behavior (backward compatibility)**
+
+- Config: Do not set `control-center-show-main-label` or set to `false`
+- Expected: No main "Control Center" header appears at the top
+- Steps:
+  1. Build and run: `ninja -C build && ./build/src/swaync`
+  2. Open control center: `./build/src/swaync-client -t`
+  3. Verify no "Control Center" label appears above other widgets
+
+**Test 2: Enable main label**
+
+- Config: Set `"control-center-show-main-label": true` in config.json
+- Expected: "Control Center" label appears at the top of control center
+- Steps:
+  1. Edit `~/.config/swaync/config.json` and add `"control-center-show-main-label": true`
+  2. Reload config: `./build/src/swaync-client -R`
+  3. Open control center: `./build/src/swaync-client -t`
+  4. Verify "Control Center" label appears as first widget
+
+**Test 3: Customize main label text**
+
+- Config: Enable flag and customize `label#main` widget config
+- Expected: Custom text appears in main header
+- Steps:
+  1. Set `"control-center-show-main-label": true`
+  2. Add to `widget-config`: `"label#main": { "text": "Notifications Panel", "max-lines": 1 }`
+  3. Reload config: `./build/src/swaync-client -R`
+  4. Verify custom text "Notifications Panel" appears
+
+**Test 4: CSS styling for main label**
+
+- Config: Enable flag and add custom CSS
+- Expected: Main label can be styled independently via `.widget-label.main` CSS class
+- Steps:
+  1. Enable `control-center-show-main-label`
+  2. Add to `~/.config/swaync/style.css`:
+
+     ```css
+     .widget-label.main {
+       font-size: 24px;
+       font-weight: bold;
+       padding: 20px;
+       background-color: rgba(255, 255, 255, 0.1);
+     }
+     ```
+
+  3. Reload CSS: `./build/src/swaync-client -rs`
+  4. Verify styling applies to main label only
+
+**Test 5: Widget ordering**
+
+- Config: Enable flag with custom widget order
+- Expected: Main label always appears first regardless of `widgets` array order
+- Steps:
+  1. Set `"control-center-show-main-label": true`
+  2. Set `"widgets": ["dnd", "title", "notifications"]`
+  3. Reload config
+  4. Verify order is: "Control Center" label → DND → Title → Notifications
+
+**Test 6: Compact layout (no main label)**
+
+- Config: Disable flag for vertical space saving
+- Expected: Control center more compact without redundant header
+- Steps:
+  1. Set `"control-center-show-main-label": false`
+  2. Set compact widget config (e.g., `"title": { "show-header": false }`)
+  3. Compare vertical space usage with/without main label
+  4. Verify compact layout works as expected
 
 ## 2. DND pill switch with icon-only option
 
@@ -29,17 +123,133 @@ This file documents planned UX/config work only; it does not reflect implemented
 
 ### Tasks
 
-- [ ] Redesign `.widget-dnd switch` in `data/style/widgets/dnd.scss`:
+- [x] Redesign `.widget-dnd switch` in `data/style/widgets/dnd.scss`:
   - Pill-shaped background, clear on/off colors, small vertical footprint.
   - Hover/focus/active states consistent with the theme.
-- [ ] Add CSS hooks for a compact/icon-only mode, e.g. `.widget-dnd.compact label { display: none; }`, while keeping state obvious.
-- [ ] Extend the DND widget schema with something like `"show-label"` or `"style": "default" | "compact"` and document defaults.
-- [ ] Update the DND widget implementation to:
+- [x] Add CSS hooks for a compact/icon-only mode, e.g. `.widget-dnd.compact label { display: none; }`, while keeping state obvious.
+- [x] Extend the DND widget schema with something like `"show-label"` or `"style": "default" | "compact"` and document defaults.
+- [x] Update the DND widget implementation to:
   - Apply the correct style class(es) based on config.
   - Use an icon (symbolic bell/DND) plus tooltip text when running in icon-only mode.
-- [ ] Verify accessibility:
+- [x] Verify accessibility:
   - Keyboard toggling works.
   - Screen readers get a sensible name/description and state.
+
+### Manual QA Notes for Task 2
+
+#### Implementation Summary
+
+- Added `show-label` boolean property to DND widget schema in [configSchema.json](src/configSchema.json#L483-L487) with default `true`
+- DND widget implementation in [dnd.vala](src/controlCenter/widgets/dnd/dnd.vala) supports icon-only mode
+- Icon changes based on DND state: `notifications-symbolic` (off) / `notifications-disabled-symbolic` (on)
+- Pill-shaped switch styling in [dnd.scss](data/style/widgets/dnd.scss) with smooth transitions
+- Compact mode CSS class automatically applied when `show-label: false`
+- Tooltip displays widget text in compact mode
+- Full keyboard accessibility: switch is focusable and toggleable via Space/Enter
+- Screen reader support: ARIA label and description properties set
+
+#### Test Cases
+
+**Test 1: Default behavior (full label)**
+
+- Config: Do not set `show-label` or set to `true` in `widget-config.dnd`
+- Expected: DND widget shows "Do Not Disturb" label + pill-shaped switch
+- Steps:
+  1. Build and run: `ninja -C build && ./build/src/swaync`
+  2. Open control center: `./build/src/swaync-client -t`
+  3. Verify label "Do Not Disturb" is visible next to switch
+  4. Verify no icon is shown before the switch
+
+**Test 2: Compact icon-only mode**
+
+- Config: Set `"show-label": false` in `widget-config.dnd`
+- Expected: Icon + switch only, no text label
+- Steps:
+  1. Edit `~/.config/swaync/config.json`: `"dnd": { "show-label": false }`
+  2. Reload config: `./build/src/swaync-client -R`
+  3. Open control center: `./build/src/swaync-client -t`
+  4. Verify bell icon appears, label is hidden
+  5. Hover over widget to see tooltip with "Do Not Disturb" text
+
+**Test 3: Icon state changes with DND toggle**
+
+- Config: Compact mode enabled
+- Expected: Icon changes between normal bell and disabled bell
+- Steps:
+  1. Set `"show-label": false`
+  2. Toggle DND off: `./build/src/swaync-client -d`
+  3. Verify icon shows `notifications-symbolic` (bell)
+  4. Toggle DND on: `./build/src/swaync-client -d`
+  5. Verify icon changes to `notifications-disabled-symbolic` (bell with slash)
+
+**Test 4: Pill-shaped switch styling**
+
+- Config: Any mode
+- Expected: Switch has rounded pill shape with smooth color transitions
+- Steps:
+  1. Open control center
+  2. Verify switch has rounded corners (border-radius: 9999px)
+  3. Toggle switch and observe smooth transition animation
+  4. Check colors: unchecked (transparent bg), checked (accent color bg)
+  5. Verify slider inside switch is circular and animates smoothly
+
+**Test 5: Hover and focus states**
+
+- Config: Any mode
+- Expected: Clear visual feedback on hover and focus
+- Steps:
+  1. Open control center
+  2. Hover over switch: verify background lightens
+  3. Tab to focus switch: verify focus outline appears (2px solid)
+  4. Press Space to toggle: verify active state (darker background)
+  5. Verify all states have smooth 200ms transitions
+
+**Test 6: Keyboard accessibility**
+
+- Config: Any mode
+- Expected: Full keyboard control without mouse
+- Steps:
+  1. Open control center with keyboard: `swaync-client -t`
+  2. Press Tab repeatedly to navigate to DND switch
+  3. Verify switch receives focus (visible focus ring)
+  4. Press Space or Enter to toggle DND
+  5. Verify state changes correctly
+  6. Press D key shortcut: verify DND toggles (global shortcut)
+
+**Test 7: Screen reader support**
+
+- Config: Compact mode
+- Expected: Screen reader announces widget name and state
+- Steps:
+  1. Enable screen reader (e.g., Orca)
+  2. Set `"show-label": false`
+  3. Navigate to DND widget with screen reader
+  4. Verify screen reader announces: "Do Not Disturb" label
+  5. Verify state is announced: "on" or "off"
+  6. Toggle and verify state change is announced
+
+**Test 8: Custom text and styling**
+
+- Config: Custom text + CSS
+- Expected: Custom text appears in tooltip and is stylable
+- Steps:
+  1. Set `"dnd": { "text": "Silenciar", "show-label": false }`
+  2. Verify tooltip shows "Silenciar"
+  3. Add custom CSS to `~/.config/swaync/style.css`:
+
+     ```css
+     .widget-dnd.compact {
+       padding: 8px 16px;
+       background: rgba(255, 255, 255, 0.05);
+       border-radius: 12px;
+     }
+     .widget-dnd switch:checked {
+       background-color: rgba(255, 100, 100, 0.9);
+     }
+     ```
+
+  4. Reload CSS: `./build/src/swaync-client -rs`
+  5. Verify custom styling applies correctly
 
 ## 3. Optional / removable widget section headers
 

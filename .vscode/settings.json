@@ -11,5 +11,8 @@
 
     // Attempt to silence the built-in SCSS/CSS linters (some extensions respect these)
     "scss.lint.unknownAtRules": "ignore",
-    "css.lint.unknownAtRules": "ignore"
+    "css.lint.unknownAtRules": "ignore",
+    "C_Cpp.default.compileCommands": "/home/bitter/git-clones/SwayNotificationCenter/builddir/compile_commands.json",
+    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
+    "cmake.sourceDirectory": "/home/bitter/git-clones/SwayNotificationCenter/build/meson-private/cmake_bash-completion"
 }

@@ -279,6 +279,8 @@ To reload css after changes
 
 ## Configuring
 
+### Quick Start
+
 The main config file is located in `/etc/xdg/swaync/config.json`. Copy it over
 to your `.config/swaync/` folder to customize without needing root access.
 See `swaync(5)` man page for more information
@@ -292,6 +294,28 @@ and customize them instead. To use the SCSS files, compile with `sassc`.
 
 **Tip**: running swaync with `GTK_DEBUG=interactive swaync` will open a inspector
 window that'll allow you to see all of the CSS classes + other information.
+
+### Ready-Made Layouts
+
+Looking for a quick setup? Check out our **[example layouts](examples/compact-layouts/)** featuring:
+
+- **[Minimal Compact](examples/compact-layouts/)** - Ultra-efficient space usage (380px width)
+- **[Waybar Style](examples/compact-layouts/)** - Clean Waybar-inspired design with Catppuccin colors
+- **[Traditional Full](examples/compact-layouts/)** - Classic layout with all headers visible
+
+Each example includes both configuration and matching CSS. [Browse all examples →](examples/compact-layouts/README.md)
+
+### Advanced Customization
+
+For detailed customization guides, see:
+
+- **[UX Customization Guide](docs/UX-CUSTOMIZATION.md)** - Complete guide for creating compact, custom layouts
+  - Optional control center title
+  - Compact icon-only DND widget
+  - Removable section headers
+  - Complete examples and CSS tips
+
+- **[Widget Configuration](man/swaync.5.scd)** - Official man page for all configuration options
 
 ## Toggle Buttons
 

@@ -62,7 +62,6 @@ namespace SwayNotificationCenter.Widgets {
                 update_icon (dnd);
             });
 
-            dnd_button.set_can_focus (false);
             dnd_button.valign = Gtk.Align.CENTER;
             // Backwards compatible towards older CSS stylesheets
             dnd_button.add_css_class ("control-center-dnd");
@@ -74,7 +73,12 @@ namespace SwayNotificationCenter.Widgets {
             // Initialize icon state
             update_icon (noti_daemon.dnd);
 
-            // Set accessible name for screen readers
+            // Set accessible name and label for screen readers
+            dnd_button.update_property (
+                Gtk.AccessibleProperty.LABEL,
+                title,
+                -1
+            );
             dnd_button.update_property (
                 Gtk.AccessibleProperty.DESCRIPTION,
                 title,

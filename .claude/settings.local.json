@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(git restore:*)",
+      "Bash(ninja -C build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
