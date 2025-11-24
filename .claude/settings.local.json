@@ -3,7 +3,8 @@
     "allow": [
       "Bash(find:*)",
       "Bash(git restore:*)",
-      "Bash(ninja -C build:*)"
+      "Bash(ninja -C build:*)",
+      "Bash(meson setup:*)"
     ],
     "deny": [],
     "ask": []

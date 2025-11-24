@@ -146,11 +146,56 @@ uncrustify -c ./.uncrustify.cfg -l vala --replace $(find . -name "*.vala" -type 
 - **Backlight**: Screen backlight slider
 - **Inhibitors**: Display and manage notification inhibitors
 
-Toggle buttons (in menubar/buttons-grid) support state commands:
+**Button Click Support:**
 
-- `active`: Initial state
-- `command`: Command to run (receives `$SWAYNC_TOGGLE_STATE` env var)
-- `update-command`: Command to check current state (should echo "true" or "false")
+Buttons in menubar and buttons-grid widgets support multiple input types:
+
+**Legacy Format (still supported):**
+
+- `command`: Command to run on click
+- `type`: "normal" or "toggle"
+- `update-command`: For toggle buttons, command to check state (should echo "true" or "false")
+- `active`: Initial toggle state
+
+**Multi-Click Format (new):**
+
+- `on-click`: Object defining actions for different mouse buttons
+  - `left`: Command or object for left click (primary action)
+  - `middle`: Command or object for middle click (scroll wheel click)
+  - `right`: Command or object for right click
+
+For toggle buttons, only left click maintains toggle state. Middle and right clicks execute commands without toggling.
+
+Example configurations:
+
+```json
+{
+  "label": "Simple",
+  "on-click": {
+    "left": "notify-send 'Left click'",
+    "middle": "notify-send 'Middle click'",
+    "right": "notify-send 'Right click'"
+  }
+}
+```
+
+```json
+{
+  "label": "Toggle",
+  "type": "toggle",
+  "on-click": {
+    "left": {
+      "command": "toggle-script.sh",
+      "update-command": "check-state.sh",
+      "active": false
+    },
+    "middle": "quick-action.sh",
+    "right": "settings.sh"
+  }
+}
+```
+
+Toggle buttons receive `$SWAYNC_TOGGLE_STATE` environment variable (left click only).
 
 ### Configuration
 
