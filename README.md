@@ -88,6 +88,7 @@ Post your setup here: [Config flex 💪](https://github.com/ErikReider/SwayNotif
 - Basic configuration through a JSON config file
 - Hot-reload config through `swaync-client`
 - Customizable widgets
+- Multi-click button support (left, middle, right click actions)
 - Select the preferred monitor to display on (with swaync-client command for scripting)
 
 ## Available Widgets
@@ -317,15 +318,17 @@ For detailed customization guides, see:
 
 - **[Widget Configuration](man/swaync.5.scd)** - Official man page for all configuration options
 
-## Toggle Buttons
+## Button Configuration
 
-To add toggle buttons to your control center you can set the "type" in any acton to "toggle".
+### Toggle Buttons
+
+To add toggle buttons to your control center you can set the "type" in any action to "toggle".
 The toggle button supports different commands depending on the state of the button and
 an "update-command" to update the state in case of changes from outside swaync. The update-command
 is called every time the control center is opened.
 The active toggle button also gains the css-class ".toggle:checked"
 
-`config.json` example:
+`config.json` example (legacy format):
 
 ```jsonc
 {
@@ -342,6 +345,83 @@ The active toggle button also gains the css-class ".toggle:checked"
   }
 }
 ```
+
+### Multi-Click Button Support
+
+Buttons now support different actions for left, middle (scroll wheel), and right clicks through the `on-click` property.
+This works for both normal and toggle buttons in both `buttons-grid` and `menubar` widgets.
+
+**Features:**
+
+- **Left click**: Primary action (for toggle buttons, maintains toggle state)
+- **Middle click**: Secondary action (executes command without toggling)
+- **Right click**: Tertiary action (executes command without toggling)
+- **Backward compatible**: Old configuration format still works
+
+**Simple multi-click button:**
+
+```jsonc
+{
+  "label": "Volume",
+  "on-click": {
+    "left": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "middle": "pavucontrol",
+    "right": "pactl set-sink-volume @DEFAULT_SINK@ 100%"
+  }
+}
+```
+
+**Toggle button with multi-click:**
+
+```jsonc
+{
+  "label": "WiFi",
+  "type": "toggle",
+  "on-click": {
+    "left": {
+      "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
+      "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'",
+      "active": true
+    },
+    "middle": "nm-connection-editor",
+    "right": "notify-send 'WiFi' \"$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)\""
+  }
+}
+```
+
+**Complete example:**
+
+```jsonc
+{
+  "buttons-grid": {
+    "actions": [
+      {
+        "label": "Power",
+        "on-click": {
+          "left": "systemctl poweroff",
+          "middle": "systemctl reboot",
+          "right": "systemctl suspend"
+        }
+      },
+      {
+        "label": "DND Toggle",
+        "type": "toggle",
+        "on-click": {
+          "left": {
+            "command": "notify-send 'DND' 'State: $SWAYNC_TOGGLE_STATE'",
+            "update-command": "echo false",
+            "active": false
+          },
+          "middle": "swaync-client -t",
+          "right": "swaync-client -C"
+        }
+      }
+    ]
+  }
+}
+```
+
+See [example-multi-click-config.json](example-multi-click-config.json) for more examples.
 
 ## Notification Inhibition
 

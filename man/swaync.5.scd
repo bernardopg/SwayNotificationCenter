@@ -553,6 +553,46 @@ config file to be able to detect config errors
 										type: bool ++
 										default: false ++
 										description: Wether the toggle button is active as default or not ++
+									on-click: ++
+										type: object ++
+										optional: true ++
+										description: Multi-click support - configure different actions for ++
+											left, middle, and right mouse buttons. When specified, overrides ++
+											the "command" property. For toggle buttons, only left-click ++
+											maintains toggle state. ++
+										properties: ++
+											left: ++
+												oneOf: ++
+													string: Command to execute on left click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
+															update-command: ++
+																type: string ++
+																optional: true ++
+																description: Command to update toggle state (toggle type only) ++
+															active: ++
+																type: bool ++
+																optional: true ++
+																description: Initial toggle state (toggle type only) ++
+											middle: ++
+												oneOf: ++
+													string: Command to execute on middle (scroll wheel) click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
+											right: ++
+												oneOf: ++
+													string: Command to execute on right click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
 							description: A list of actions containing a label and a command ++
 					description: A button to reveal a dropdown with action-buttons ++
 				buttons#<name>: ++
@@ -596,6 +636,46 @@ config file to be able to detect config errors
 										type: bool ++
 										default: false ++
 										description: Wether the toggle button is active as default or not ++
+									on-click: ++
+										type: object ++
+										optional: true ++
+										description: Multi-click support - configure different actions for ++
+											left, middle, and right mouse buttons. When specified, overrides ++
+											the "command" property. For toggle buttons, only left-click ++
+											maintains toggle state. ++
+										properties: ++
+											left: ++
+												oneOf: ++
+													string: Command to execute on left click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
+															update-command: ++
+																type: string ++
+																optional: true ++
+																description: Command to update toggle state (toggle type only) ++
+															active: ++
+																type: bool ++
+																optional: true ++
+																description: Initial toggle state (toggle type only) ++
+											middle: ++
+												oneOf: ++
+													string: Command to execute on middle (scroll wheel) click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
+											right: ++
+												oneOf: ++
+													string: Command to execute on right click ++
+													object: ++
+														properties: ++
+															command: ++
+																type: string ++
+																description: Command to execute ++
 							description: A list of actions containing a label and a command ++
 					description: A list of buttons to be displayed in the menu-button-bar ++
 		*buttons-grid*++
@@ -630,6 +710,46 @@ config file to be able to detect config errors
 								type: bool ++
 								default: false ++
 								description: Wether the toggle button is active as default or not ++
+							on-click: ++
+								type: object ++
+								optional: true ++
+								description: Multi-click support - configure different actions for ++
+									left, middle, and right mouse buttons. When specified, overrides ++
+									the "command" property. For toggle buttons, only left-click ++
+									maintains toggle state. ++
+								properties: ++
+									left: ++
+										oneOf: ++
+											string: Command to execute on left click ++
+											object: ++
+												properties: ++
+													command: ++
+														type: string ++
+														description: Command to execute ++
+													update-command: ++
+														type: string ++
+														optional: true ++
+														description: Command to update toggle state (toggle type only) ++
+													active: ++
+														type: bool ++
+														optional: true ++
+														description: Initial toggle state (toggle type only) ++
+									middle: ++
+										oneOf: ++
+											string: Command to execute on middle (scroll wheel) click ++
+											object: ++
+												properties: ++
+													command: ++
+														type: string ++
+														description: Command to execute ++
+									right: ++
+										oneOf: ++
+											string: Command to execute on right click ++
+											object: ++
+												properties: ++
+													command: ++
+														type: string ++
+														description: Command to execute ++
 					description: A list of actions containing a label and a command ++
 			description: A grid of buttons that execute shell commands ++
 		*slider*++
@@ -953,3 +1073,84 @@ $SWAYNC_SOUND_NAME="The name of the requested sound"
 $SWAYNC_SOUND_FILE="The file path of the requested sound"
 ```
 #END scripting
+
+# MULTI-CLICK BUTTON EXAMPLES
+
+Buttons in *buttons-grid* and *menubar* widgets support different actions for left,
+middle (scroll wheel), and right mouse clicks. This feature is backward compatible
+with the legacy single-command format.
+
+## Simple Multi-Click Button
+
+```
+{
+	"label": "Volume Control",
+	"on-click": {
+		"left": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"middle": "pavucontrol",
+		"right": "pactl set-sink-volume @DEFAULT_SINK@ 100%"
+	}
+}
+```
+
+## Toggle Button with Multi-Click
+
+For toggle buttons, only left-click maintains the toggle state. Middle and right
+clicks execute commands without affecting the toggle state.
+
+```
+{
+	"label": "WiFi",
+	"type": "toggle",
+	"on-click": {
+		"left": {
+			"command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
+			"update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'",
+			"active": true
+		},
+		"middle": "nm-connection-editor",
+		"right": "notify-send 'WiFi Info' \"$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)\""
+	}
+}
+```
+
+## Complete Configuration Example
+
+```
+{
+	"buttons-grid": {
+		"actions": [
+			{
+				"label": "Power",
+				"on-click": {
+					"left": "systemctl poweroff",
+					"middle": "systemctl reboot",
+					"right": "systemctl suspend"
+				}
+			},
+			{
+				"label": "Legacy Button",
+				"command": "notify-send 'Click' 'Any button works'",
+				"type": "normal"
+			}
+		]
+	},
+	"menubar": {
+		"menu#system": {
+			"label": "System",
+			"position": "right",
+			"actions": [
+				{
+					"label": "Display",
+					"on-click": {
+						"left": "wdisplays",
+						"right": "notify-send 'Display Info' \"$(wlr-randr)\""
+					}
+				}
+			]
+		}
+	}
+}
+```
+
+See *example-multi-click-config.json* in the source repository for more examples.
