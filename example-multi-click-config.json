@@ -1,0 +1,109 @@
+{
+  "$schema": "https://github.com/ErikReider/SwayNotificationCenter/raw/main/src/configSchema.json",
+  "positionX": "right",
+  "positionY": "top",
+  "timeout": 10,
+  "timeout-low": 5,
+  "timeout-critical": 0,
+  "fit-to-screen": true,
+  "control-center-margin-top": 0,
+  "control-center-margin-bottom": 0,
+  "control-center-margin-right": 0,
+  "control-center-margin-left": 0,
+  "notification-icon-size": 64,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+  "notification-window-width": 500,
+  "control-center-width": 500,
+  "control-center-height": 600,
+
+  "widgets": [
+    "title",
+    "dnd",
+    "notifications",
+    "buttons-grid#multi-click-example",
+    "menubar#multi-click-menu"
+  ],
+
+  "widget-config": {
+    "title": {
+      "text": "Multi-Click Button Examples",
+      "clear-all-button": true,
+      "button-text": "Clear All"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    "buttons-grid#multi-click-example": {
+      "buttons-per-row": 3,
+      "actions": [
+        {
+          "label": "Simple Multi-Click",
+          "on-click": {
+            "left": "notify-send 'Left Click' 'You clicked with the left mouse button'",
+            "middle": "notify-send 'Middle Click' 'You clicked with the middle mouse button'",
+            "right": "notify-send 'Right Click' 'You clicked with the right mouse button'"
+          }
+        },
+        {
+          "label": "Toggle + Extra Actions",
+          "type": "toggle",
+          "on-click": {
+            "left": {
+              "command": "notify-send 'Toggle' 'State is now: $SWAYNC_TOGGLE_STATE'",
+              "update-command": "echo false",
+              "active": false
+            },
+            "middle": "notify-send 'Quick Action' 'Middle click for quick action'",
+            "right": "notify-send 'Settings' 'Right click to open settings'"
+          }
+        },
+        {
+          "label": "Legacy Format",
+          "command": "notify-send 'Legacy' 'This uses the old format - works with any click'",
+          "type": "normal"
+        }
+      ]
+    },
+    "menubar#multi-click-menu": {
+      "menu#power": {
+        "label": "Power Menu",
+        "position": "right",
+        "actions": [
+          {
+            "label": "Shutdown",
+            "on-click": {
+              "left": "notify-send 'Shutdown' 'Left click to shutdown'",
+              "right": "notify-send 'Force Shutdown' 'Right click for force shutdown'"
+            }
+          },
+          {
+            "label": "Reboot",
+            "on-click": {
+              "left": "notify-send 'Reboot' 'Left click to reboot'",
+              "right": "notify-send 'Force Reboot' 'Right click for force reboot'"
+            }
+          }
+        ]
+      },
+      "buttons#quick-actions": {
+        "position": "left",
+        "actions": [
+          {
+            "label": "WiFi Toggle",
+            "type": "toggle",
+            "on-click": {
+              "left": {
+                "command": "notify-send 'WiFi Toggle' 'State: $SWAYNC_TOGGLE_STATE'",
+                "update-command": "echo false",
+                "active": false
+              },
+              "middle": "notify-send 'WiFi Settings' 'Opening WiFi settings...'",
+              "right": "notify-send 'Network Info' 'Showing network info...'"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
