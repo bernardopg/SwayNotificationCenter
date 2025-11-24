@@ -603,7 +603,7 @@
                             },
                             "command": {
                                 "type": "string",
-                                "description": "Command to be executed on click",
+                                "description": "Command to be executed on click (legacy format, use on-click for multi-click support)",
                                 "default": ""
                             },
                             "type": {
@@ -621,6 +621,84 @@
                                 "type": "boolean",
                                 "description": "Whether the toggle button is active as default or not",
                                 "default": false
+                            },
+                            "tooltip": {
+                                "type": "string",
+                                "description": "Tooltip text to display when hovering over the button",
+                                "default": ""
+                            },
+                            "on-click": {
+                                "type": "object",
+                                "description": "Multi-click support: configure different actions for left, middle, and right clicks",
+                                "properties": {
+                                    "left": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "description": "Command to execute on left click"
+                                            },
+                                            {
+                                                "type": "object",
+                                                "description": "Toggle button configuration for left click",
+                                                "properties": {
+                                                    "command": {
+                                                        "type": "string",
+                                                        "description": "Command to execute",
+                                                        "default": ""
+                                                    },
+                                                    "update-command": {
+                                                        "type": "string",
+                                                        "description": "Command to update toggle state (for toggle type only)",
+                                                        "default": ""
+                                                    },
+                                                    "active": {
+                                                        "type": "boolean",
+                                                        "description": "Initial toggle state (for toggle type only)",
+                                                        "default": false
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "middle": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "description": "Command to execute on middle click"
+                                            },
+                                            {
+                                                "type": "object",
+                                                "description": "Command configuration for middle click",
+                                                "properties": {
+                                                    "command": {
+                                                        "type": "string",
+                                                        "description": "Command to execute",
+                                                        "default": ""
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "right": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string",
+                                                "description": "Command to execute on right click"
+                                            },
+                                            {
+                                                "type": "object",
+                                                "description": "Command configuration for right click",
+                                                "properties": {
+                                                    "command": {
+                                                        "type": "string",
+                                                        "description": "Command to execute",
+                                                        "default": ""
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
                             }
                         }
                     }

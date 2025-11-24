@@ -17,6 +17,7 @@ namespace SwayNotificationCenter.Widgets {
         string ?label;
         Position ?position;
         Action[] actions;
+        Json.Array ?actions_json;
         Gtk.Revealer ?revealer;
         int animation_duration;
         Gtk.RevealerTransitionType animation_type;
@@ -28,6 +29,7 @@ namespace SwayNotificationCenter.Widgets {
         BaseWidget.ButtonType ?type;
         string ?update_command;
         bool ?active;
+        string ?tooltip;
     }
 
     public class Menubar : BaseWidget {
@@ -42,6 +44,7 @@ namespace SwayNotificationCenter.Widgets {
 
         List<ConfigObject ?> menu_objects;
         List<ToggleButton> toggle_buttons;
+        List<ClickableButton> clickable_buttons;
 
         public Menubar (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
             base (suffix, swaync_daemon, noti_daemon);
@@ -92,21 +95,8 @@ namespace SwayNotificationCenter.Widgets {
                         container.add_css_class (obj.name);
                     }
 
-                    foreach (Action a in obj.actions) {
-                        switch (a.type) {
-                            case ButtonType.TOGGLE :
-                                ToggleButton tb = new ToggleButton (a.label, a.command,
-                                                                    a.update_command, a.active);
-                                container.append (tb);
-                                toggle_buttons.append (tb);
-                                break;
-                                default :
-                                Gtk.Button b = new Gtk.Button.with_label (a.label);
-                                b.clicked.connect (() => execute_command.begin (a.command));
-                                container.append (b);
-                                break;
-                        }
-                    }
+                    add_buttons_to_container (container, obj.actions, obj.actions_json);
+
                     switch (obj.position) {
                         case Position.LEFT :
                             left_container.append (container);
@@ -143,23 +133,7 @@ namespace SwayNotificationCenter.Widgets {
                     r.set_reveal_child (visible);
                 });
 
-                    foreach (var a in obj.actions) {
-                        switch (a.type) {
-                            case ButtonType.TOGGLE :
-                                ToggleButton tb = new ToggleButton (a.label, a.command,
-                                                                    a.update_command, a.active);
-                                tb.set_hexpand (true);
-                                menu.append (tb);
-                                toggle_buttons.append (tb);
-                                break;
-                                default :
-                                Gtk.Button b = new Gtk.Button.with_label (a.label);
-                                b.set_hexpand (true);
-                                b.clicked.connect (() => execute_command.begin (a.command));
-                                menu.append (b);
-                                break;
-                        }
-                    }
+                    add_buttons_to_container (menu, obj.actions, obj.actions_json, true);
 
                     switch (obj.position) {
                         case Position.RIGHT:
@@ -172,6 +146,71 @@ namespace SwayNotificationCenter.Widgets {
 
                     append (r);
                     break;
+            }
+        }
+
+        void add_buttons_to_container (Gtk.Box container, Action[] actions,
+                                       Json.Array ?actions_json, bool expand = false) {
+            if (actions_json == null) {
+                // Fallback to old method if no JSON available
+                foreach (Action a in actions) {
+                    switch (a.type) {
+                        case ButtonType.TOGGLE :
+                            ToggleButton tb = new ToggleButton (a.label, a.command,
+                                                                a.update_command, a.active);
+                            if (expand) tb.set_hexpand (true);
+                            container.append (tb);
+                            toggle_buttons.append (tb);
+                            break;
+                        default :
+                            Gtk.Button b = new Gtk.Button.with_label (a.label);
+                            if (expand) b.set_hexpand (true);
+                            b.clicked.connect (() => execute_command.begin (a.command));
+                            container.append (b);
+                            break;
+                    }
+                }
+                return;
+            }
+
+            // New method with multi-click support
+            for (int i = 0; i < actions.length; i++) {
+                Json.Object action_obj = actions_json.get_object_element (i);
+                Action act = actions[i];
+
+                // Try to parse on-click configuration first
+                ClickAction? left, middle, right;
+                bool has_multi_click = parse_on_click (action_obj, out left, out middle,
+                                                       out right, act.type);
+
+                if (has_multi_click) {
+                    // Create multi-click button
+                    bool is_toggle = (act.type == ButtonType.TOGGLE);
+                    ClickableButton cb = new ClickableButton (act.label, left, middle,
+                                                              right, is_toggle);
+                    if (expand) cb.set_hexpand (true);
+                    container.append (cb);
+                    if (is_toggle) {
+                        clickable_buttons.append (cb);
+                    }
+                } else {
+                    // Use legacy button creation
+                    switch (act.type) {
+                        case ButtonType.TOGGLE :
+                            ToggleButton tb = new ToggleButton (act.label, act.command,
+                                                                act.update_command, act.active);
+                            if (expand) tb.set_hexpand (true);
+                            container.append (tb);
+                            toggle_buttons.append (tb);
+                            break;
+                        default :
+                            Gtk.Button b = new Gtk.Button.with_label (act.label);
+                            if (expand) b.set_hexpand (true);
+                            b.clicked.connect (() => execute_command.begin (act.command));
+                            container.append (b);
+                            break;
+                    }
+                }
             }
         }
 
@@ -256,6 +295,7 @@ namespace SwayNotificationCenter.Widgets {
                     label = label,
                     position = pos,
                     actions = actions_list,
+                    actions_json = actions,
                     revealer = null,
                     animation_duration = duration,
                     animation_type = revealer_type,
@@ -271,6 +311,9 @@ namespace SwayNotificationCenter.Widgets {
             } else {
                 foreach (var tb in toggle_buttons) {
                     tb.on_update.begin ();
+                }
+                foreach (var cb in clickable_buttons) {
+                    cb.on_update.begin ();
                 }
             }
         }

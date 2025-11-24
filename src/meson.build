@@ -27,6 +27,7 @@ widget_sources = [
   'controlCenter/widgets/baseWidget.vala',
   'controlCenter/widgets/factory.vala',
   'controlCenter/widgets/shared/toggleButton.vala',
+  'controlCenter/widgets/shared/clickableButton.vala',
   # Widget: Notifications
   'controlCenter/widgets/notifications/notifications.vala',
   # Widget: Title

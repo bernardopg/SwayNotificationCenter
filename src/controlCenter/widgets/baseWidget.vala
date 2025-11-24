@@ -124,15 +124,88 @@ namespace SwayNotificationCenter.Widgets {
                 bool active =
                     actions.get_object_element (i).get_boolean_member_with_default ("active",
                                                                                     false);
+                string tooltip =
+                    actions.get_object_element (i).get_string_member_with_default ("tooltip", "");
                 res[i] = Action () {
                     label = label,
                     command = command,
                     type = type,
                     update_command = update_command,
-                    active = active
+                    active = active,
+                    tooltip = tooltip
                 };
             }
             return res;
+        }
+
+        /**
+         * Parse on-click configuration for multi-click button support.
+         * Returns true if on-click is present, false otherwise.
+         */
+        protected bool parse_on_click (Json.Object action_obj,
+                                       out ClickAction? left,
+                                       out ClickAction? middle,
+                                       out ClickAction? right,
+                                       ButtonType type) {
+            left = null;
+            middle = null;
+            right = null;
+
+            if (!action_obj.has_member ("on-click")) {
+                return false;
+            }
+
+            var on_click = action_obj.get_member ("on-click");
+            if (on_click.get_node_type () != Json.NodeType.OBJECT) {
+                debug ("on-click must be an object");
+                return false;
+            }
+
+            Json.Object click_obj = on_click.get_object ();
+            bool is_toggle = (type == ButtonType.TOGGLE);
+
+            // Parse left click
+            if (click_obj.has_member ("left")) {
+                left = parse_click_action (click_obj.get_member ("left"), is_toggle, action_obj);
+            }
+
+            // Parse middle click
+            if (click_obj.has_member ("middle")) {
+                middle = parse_click_action (click_obj.get_member ("middle"), false, action_obj);
+            }
+
+            // Parse right click
+            if (click_obj.has_member ("right")) {
+                right = parse_click_action (click_obj.get_member ("right"), false, action_obj);
+            }
+
+            return true;
+        }
+
+        private ClickAction parse_click_action (Json.Node node, bool is_toggle, Json.Object parent) {
+            ClickAction action = ClickAction () {
+                command = null,
+                update_command = "",
+                active = false
+            };
+
+            // If it's a string, it's a simple command
+            if (node.get_node_type () == Json.NodeType.VALUE) {
+                action.command = node.get_string ();
+                return action;
+            }
+
+            // If it's an object, parse command, update-command, and active
+            if (node.get_node_type () == Json.NodeType.OBJECT) {
+                Json.Object obj = node.get_object ();
+                action.command = obj.get_string_member_with_default ("command", "");
+                if (is_toggle) {
+                    action.update_command = obj.get_string_member_with_default ("update-command", "");
+                    action.active = obj.get_boolean_member_with_default ("active", false);
+                }
+            }
+
+            return action;
         }
 
         protected async void execute_command (string cmd, string[] env_additions = {}) {
