@@ -51,6 +51,7 @@ theme might require extra tweaks to the default CSS style file*
     - [Disable scripting](#disable-scripting)
   - [i3status-rs Example](#i3status-rs-example)
   - [Waybar Example](#waybar-example)
+  - [Translations](#translations)
   - [Debugging Environment Variables](#debugging-environment-variables)
 
 ## Want to show off your sick config?
@@ -90,6 +91,7 @@ Post your setup here: [Config flex 💪](https://github.com/ErikReider/SwayNotif
 - Customizable widgets
 - Multi-click button support (left, middle, right click actions)
 - Select the preferred monitor to display on (with swaync-client command for scripting)
+- Internationalization (i18n) support with translations
 
 ## Available Widgets
 
@@ -563,6 +565,38 @@ Alternatively, the number of notifications can be shown by adding `{0}` anywhere
     "format": "{0} {icon}",
     // ...
   },
+```
+
+## Translations
+
+SwayNotificationCenter supports internationalization (i18n) using gettext. The following translations are available:
+
+- Portuguese (Brazil) - `pt_BR`
+
+### Adding a New Translation
+
+1. Add your language code to `po/LINGUAS`
+2. Generate a new translation file:
+
+```zsh
+msginit --locale=<lang_code> --input=po/swaync.pot --output=po/<lang_code>.po
+```
+
+3. Edit the `.po` file with your translations using a tool like [Poedit](https://poedit.net/) or any text editor
+4. Rebuild and install:
+
+```zsh
+meson setup build --prefix=/usr --wipe
+ninja -C build
+sudo meson install -C build
+```
+
+### Testing Translations
+
+Set the `LANG` environment variable to test a specific locale:
+
+```zsh
+LANG=pt_BR.UTF-8 swaync-client --help
 ```
 
 ## Debugging Environment Variables

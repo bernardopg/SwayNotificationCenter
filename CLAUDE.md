@@ -281,6 +281,37 @@ Uses Vala preprocessor directives:
 
 Set via meson build options which add `-D HAVE_PULSE_AUDIO` or `-D WANT_SCRIPTING` to Vala compiler args.
 
+## Internationalization (i18n)
+
+Swaync uses GNU gettext for translations:
+
+- **Text domain**: `swaync`
+- **Locale directory**: `/usr/share/locale`
+- **POT template**: `po/swaync.pot`
+- **Translations**: `po/<lang>.po` (e.g., `po/pt_BR.po`)
+
+### Translatable Strings
+
+User-visible strings are wrapped with `_()` macro:
+
+```vala
+string title = _("Notifications");
+string tooltip = ngettext("%u Notification", "%u Notifications", count).printf(count);
+```
+
+### Adding Translations
+
+1. Add language code to `po/LINGUAS`
+2. Generate `.po` file: `msginit --locale=<lang> --input=po/swaync.pot --output=po/<lang>.po`
+3. Translate strings in the `.po` file
+4. Rebuild and install
+
+### Testing Translations
+
+```bash
+LANG=pt_BR.UTF-8 swaync-client --help
+```
+
 ## Debugging
 
 ```bash

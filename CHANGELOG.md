@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Displays helpful text when hovering over buttons
   - Works with all button types (normal, toggle, multi-click)
 
+- **Internationalization (i18n) Support**: Full gettext infrastructure for translations
+  - Portuguese (Brazil) translation included
+  - All user-visible strings are now translatable
+  - Easy to add new languages via standard .po files
+  - Automatic locale detection
+
 ### Changed
 
 - Button command parsing now checks for `on-click` property first, falling back to legacy `command` property
