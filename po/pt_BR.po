@@ -1,0 +1,233 @@
+# Traduções em Português (Brasil) para SwayNotificationCenter.
+# Copyright (C) 2025 SwayNotificationCenter Contributors
+# This file is distributed under the same license as the swaync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: swaync 0.12.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 18:36-0300\n"
+"PO-Revision-Date: 2025-11-24 18:36-0300\n"
+"Last-Translator: SwayNotificationCenter Contributors\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/main.vala:257 src/client.vala:54
+msgid "Usage:"
+msgstr "Uso:"
+
+#: src/main.vala:259 src/client.vala:56
+msgid "Help:"
+msgstr "Ajuda:"
+
+#: src/main.vala:260
+msgid "\t -h, --help \t\t Show help options"
+msgstr "\t -h, --help \t\t Mostrar opções de ajuda"
+
+#: src/main.vala:261
+msgid "\t -v, --version \t\t Prints version"
+msgstr "\t -v, --version \t\t Exibir versão"
+
+#: src/main.vala:262 src/client.vala:59
+msgid "Options:"
+msgstr "Opções:"
+
+#: src/main.vala:263
+msgid "\t -s, --style \t\t Use a custom Stylesheet file"
+msgstr "\t -s, --style \t\t Usar arquivo de estilo personalizado"
+
+#: src/main.vala:264
+msgid "\t -c, --config \t\t Use a custom config file"
+msgstr "\t -c, --config \t\t Usar arquivo de configuração personalizado"
+
+#: src/main.vala:265
+msgid ""
+"\t --skip-system-css \t Skip trying to parse the packaged Stylesheet file. "
+"Useful for CSS debugging"
+msgstr ""
+"\t --skip-system-css \t Ignorar arquivo de estilo do sistema. "
+"Útil para depuração de CSS"
+
+#: src/main.vala:266
+msgid ""
+"\t --custom-system-css \t Pick a custom CSS file to use as the \"system\" "
+"CSS. Useful for CSS debugging"
+msgstr ""
+"\t --custom-system-css \t Escolher um CSS personalizado como CSS do sistema. "
+"Útil para depuração de CSS"
+
+#: src/client.vala:57
+msgid "  -h, \t --help \t\t\t Show help options"
+msgstr "  -h, \t --help \t\t\t Mostrar opções de ajuda"
+
+#: src/client.vala:58
+msgid "  -v, \t --version \t\t\t Prints version"
+msgstr "  -v, \t --version \t\t\t Exibir versão"
+
+#: src/client.vala:60
+msgid "  -R, \t --reload-config \t\t Reload the config file"
+msgstr "  -R, \t --reload-config \t\t Recarregar arquivo de configuração"
+
+#: src/client.vala:61
+msgid ""
+"  -rs, \t --reload-css \t\t\t Reload the css file. Location change requires "
+"restart"
+msgstr ""
+"  -rs, \t --reload-css \t\t\t Recarregar CSS. Mudança de local requer "
+"reinicialização"
+
+#: src/client.vala:62
+msgid "  -t, \t --toggle-panel \t\t Toggle the notification panel"
+msgstr "  -t, \t --toggle-panel \t\t Alternar painel de notificações"
+
+#: src/client.vala:63
+msgid "  -op, \t --open-panel \t\t\t Opens the notification panel"
+msgstr "  -op, \t --open-panel \t\t\t Abrir painel de notificações"
+
+#: src/client.vala:64
+msgid "  -cp, \t --close-panel \t\t\t Closes the notification panel"
+msgstr "  -cp, \t --close-panel \t\t\t Fechar painel de notificações"
+
+#: src/client.vala:65
+msgid "  -d, \t --toggle-dnd \t\t\t Toggle and print the current dnd state"
+msgstr "  -d, \t --toggle-dnd \t\t\t Alternar e exibir estado atual do Não Perturbe"
+
+#: src/client.vala:66
+msgid "  -D, \t --get-dnd \t\t\t Print the current dnd state"
+msgstr "  -D, \t --get-dnd \t\t\t Exibir estado atual do Não Perturbe"
+
+#: src/client.vala:67
+msgid "  -dn, \t --dnd-on \t\t\t Turn dnd on and print the new dnd state"
+msgstr "  -dn, \t --dnd-on \t\t\t Ativar Não Perturbe e exibir novo estado"
+
+#: src/client.vala:68
+msgid "  -df, \t --dnd-off \t\t\t Turn dnd off and print the new dnd state"
+msgstr "  -df, \t --dnd-off \t\t\t Desativar Não Perturbe e exibir novo estado"
+
+#: src/client.vala:69
+msgid "  -I, \t --get-inhibited \t\t Print if currently inhibited or not"
+msgstr "  -I, \t --get-inhibited \t\t Exibir se está inibido ou não"
+
+#: src/client.vala:70
+msgid "  -In, \t --get-num-inhibitors \t\t Print number of inhibitors"
+msgstr "  -In, \t --get-num-inhibitors \t\t Exibir número de inibidores"
+
+#: src/client.vala:71
+msgid "  -Ia, \t --inhibitor-add [APP_ID] \t Add an inhibitor"
+msgstr "  -Ia, \t --inhibitor-add [APP_ID] \t Adicionar um inibidor"
+
+#: src/client.vala:72
+msgid "  -Ir, \t --inhibitor-remove [APP_ID] \t Remove an inhibitor"
+msgstr "  -Ir, \t --inhibitor-remove [APP_ID] \t Remover um inibidor"
+
+#: src/client.vala:73
+msgid "  -Ic, \t --inhibitors-clear \t\t Clears all inhibitors"
+msgstr "  -Ic, \t --inhibitors-clear \t\t Limpar todos os inibidores"
+
+#: src/client.vala:74
+msgid "  -c, \t --count \t\t\t Print the current notification count"
+msgstr "  -c, \t --count \t\t\t Exibir contagem de notificações"
+
+#: src/client.vala:75
+msgid ""
+"      \t --hide-latest \t\t\t Hides latest notification. Still shown in "
+"Control Center"
+msgstr ""
+"      \t --hide-latest \t\t\t Ocultar última notificação. Ainda aparece na "
+"Central de Controle"
+
+#: src/client.vala:76
+msgid ""
+"      \t --hide-all \t\t\t Hides all notifications. Still shown in Control "
+"Center"
+msgstr ""
+"      \t --hide-all \t\t\t Ocultar todas as notificações. Ainda aparecem na "
+"Central de Controle"
+
+#: src/client.vala:77
+msgid "      \t --close-latest \t\t Closes latest notification"
+msgstr "      \t --close-latest \t\t Fechar última notificação"
+
+#: src/client.vala:78
+msgid "  -C, \t --close-all \t\t\t Closes all notifications"
+msgstr "  -C, \t --close-all \t\t\t Fechar todas as notificações"
+
+#: src/client.vala:79
+msgid ""
+"  -a, \t --action [ACTION_INDEX]\t Invokes the action [ACTION_INDEX] of the "
+"latest notification"
+msgstr ""
+"  -a, \t --action [ACTION_INDEX]\t Invocar a ação [ACTION_INDEX] da "
+"última notificação"
+
+#: src/client.vala:80
+msgid ""
+"  -sw, \t --skip-wait \t\t\t Doesn't wait when swaync hasn't been started"
+msgstr ""
+"  -sw, \t --skip-wait \t\t\t Não esperar quando swaync não foi iniciado"
+
+#: src/client.vala:81
+msgid ""
+"  -s, \t --subscribe \t\t\t Subscribe to notification add and close events"
+msgstr ""
+"  -s, \t --subscribe \t\t\t Inscrever em eventos de adição e fechamento"
+
+#: src/client.vala:82
+msgid ""
+"  -swb,  --subscribe-waybar \t\t Subscribe to notification add and close "
+"events with waybar support. Read README for example"
+msgstr ""
+"  -swb,  --subscribe-waybar \t\t Inscrever com suporte a waybar. "
+"Veja README para exemplos"
+
+#: src/client.vala:83
+msgid ""
+"      \t --change-cc-monitor \t\t Changes the preferred control center "
+"monitor (resets on config reload)"
+msgstr ""
+"      \t --change-cc-monitor \t\t Alterar monitor da Central de Controle "
+"(reinicia ao recarregar config)"
+
+#: src/client.vala:84
+msgid ""
+"      \t --change-noti-monitor \t\t Changes the preferred notification "
+"monitor (resets on config reload)"
+msgstr ""
+"      \t --change-noti-monitor \t\t Alterar monitor de notificações "
+"(reinicia ao recarregar config)"
+
+#: src/client.vala:110
+#, c-format
+msgid "%u Notification"
+msgid_plural "%u Notifications"
+msgstr[0] "%u Notificação"
+msgstr[1] "%u Notificações"
+
+#: src/controlCenter/widgets/title/title.vala:13
+msgid "Notifications"
+msgstr "Notificações"
+
+#: src/controlCenter/widgets/title/title.vala:15
+#: src/controlCenter/widgets/inhibitors/inhibitors.vala:15
+msgid "Clear All"
+msgstr "Limpar"
+
+#: src/controlCenter/widgets/dnd/dnd.vala:14
+msgid "Do Not Disturb"
+msgstr "Não Perturbe"
+
+#: src/controlCenter/widgets/label/label.vala:12
+msgid "Label Text"
+msgstr "Texto do Rótulo"
+
+#: src/controlCenter/widgets/label/label.vala:20
+msgid "Control Center"
+msgstr "Central de Controle"
+
+#: src/controlCenter/widgets/inhibitors/inhibitors.vala:13
+msgid "Inhibitors"
+msgstr "Inibidores"

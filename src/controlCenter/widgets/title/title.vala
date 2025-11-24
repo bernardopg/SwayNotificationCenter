@@ -10,9 +10,9 @@ namespace SwayNotificationCenter.Widgets {
         Gtk.Button clear_all_button;
 
         // Default config values
-        string title = "Notifications";
+        string title = _("Notifications");
         bool has_clear_all_button = true;
-        string button_text = "Clear All";
+        string button_text = _("Clear All");
         bool show_header = true;
 
         public Title (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {

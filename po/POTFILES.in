@@ -1,0 +1,9 @@
+# List of source files containing translatable strings.
+# Please keep this list sorted alphabetically.
+
+src/client.vala
+src/controlCenter/widgets/dnd/dnd.vala
+src/controlCenter/widgets/inhibitors/inhibitors.vala
+src/controlCenter/widgets/label/label.vala
+src/controlCenter/widgets/title/title.vala
+src/main.vala

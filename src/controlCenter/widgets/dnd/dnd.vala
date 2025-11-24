@@ -11,7 +11,7 @@ namespace SwayNotificationCenter.Widgets {
         Gtk.Switch dnd_button;
 
         // Default config values
-        string title = "Do Not Disturb";
+        string title = _("Do Not Disturb");
         bool show_label = true;
 
         public Dnd (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {

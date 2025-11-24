@@ -5,6 +5,7 @@ project('sway-notificaton-center', ['c', 'vala'],
 )
 
 add_project_arguments(['-Wno-error=int-conversion'], language: 'c')
+add_project_arguments(['-DGETTEXT_PACKAGE="swaync"'], language: 'c')
 add_project_arguments(['--enable-gobject-tracing'], language: 'vala')
 add_project_arguments(['--enable-checking'], language: 'vala')
 
@@ -12,6 +13,7 @@ cc = meson.get_compiler('c')
 vala = meson.get_compiler('vala')
 
 gnome = import('gnome')
+i18n = import('i18n')
 
 app_resources = []
 
@@ -22,6 +24,7 @@ protocol_dep = []
 subdir('protocols')
 
 subdir('data')
+subdir('po')
 subdir('src')
 
 datadir = get_option('datadir')

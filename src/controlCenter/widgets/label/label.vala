@@ -9,7 +9,7 @@ namespace SwayNotificationCenter.Widgets {
         Gtk.Label label_widget;
 
         // Default config values
-        string text = "Label Text";
+        string text = _("Label Text");
         int max_lines = 5;
 
         public Label (string suffix, SwayncDaemon swaync_daemon, NotiDaemon noti_daemon) {
@@ -17,7 +17,7 @@ namespace SwayNotificationCenter.Widgets {
 
             // Special handling for the main Control Center label
             if (suffix == "main") {
-                this.text = "Control Center";
+                this.text = _("Control Center");
             }
 
             Json.Object ?config = get_config (this);

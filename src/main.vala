@@ -146,6 +146,12 @@ namespace SwayNotificationCenter {
 
             print_startup_info ();
 
+            // Initialize i18n
+            Intl.setlocale (LocaleCategory.ALL, "");
+            Intl.bindtextdomain ("swaync", "/usr/share/locale");
+            Intl.bind_textdomain_codeset ("swaync", "UTF-8");
+            Intl.textdomain ("swaync");
+
             // Register custom Widgets so that they can be used in .ui template files
             typeof (AnimatedList).ensure ();
             typeof (AnimatedListItem).ensure ();
@@ -248,18 +254,16 @@ namespace SwayNotificationCenter {
         }
 
         private static void print_help (string[] args) {
-            print ("Usage:\n");
+            print (_("Usage:") + "\n");
             print ("\t %s <OPTION>\n".printf (args[0]));
-            print ("Help:\n");
-            print ("\t -h, --help \t\t Show help options\n");
-            print ("\t -v, --version \t\t Prints version\n");
-            print ("Options:\n");
-            print ("\t -s, --style \t\t Use a custom Stylesheet file\n");
-            print ("\t -c, --config \t\t Use a custom config file\n");
-            print ("\t --skip-system-css \t Skip trying to parse the packaged Stylesheet file."
-                   + " Useful for CSS debugging\n");
-            print ("\t --custom-system-css \t Pick a custom CSS file to use as the \"system\" CSS."
-                   + " Useful for CSS debugging\n");
+            print (_("Help:") + "\n");
+            print (_("\t -h, --help \t\t Show help options") + "\n");
+            print (_("\t -v, --version \t\t Prints version") + "\n");
+            print (_("Options:") + "\n");
+            print (_("\t -s, --style \t\t Use a custom Stylesheet file") + "\n");
+            print (_("\t -c, --config \t\t Use a custom config file") + "\n");
+            print (_("\t --skip-system-css \t Skip trying to parse the packaged Stylesheet file. Useful for CSS debugging") + "\n");
+            print (_("\t --custom-system-css \t Pick a custom CSS file to use as the \"system\" CSS. Useful for CSS debugging") + "\n");
         }
     }
 }

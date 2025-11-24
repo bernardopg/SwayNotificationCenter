@@ -51,42 +51,37 @@ interface CcDaemon : Object {
 private CcDaemon cc_daemon = null;
 
 private void print_help (string[] args) {
-    print ("Usage:\n");
+    print (_("Usage:") + "\n");
     print ("  %s <OPTION>\n".printf (args[0]));
-    print ("Help:\n");
-    print ("  -h, \t --help \t\t\t Show help options\n");
-    print ("  -v, \t --version \t\t\t Prints version\n");
-    print ("Options:\n");
-    print ("  -R, \t --reload-config \t\t Reload the config file\n");
-    print ("  -rs, \t --reload-css \t\t\t Reload the css file. Location change requires restart\n");
-    print ("  -t, \t --toggle-panel \t\t Toggle the notification panel\n");
-    print ("  -op, \t --open-panel \t\t\t Opens the notification panel\n");
-    print ("  -cp, \t --close-panel \t\t\t Closes the notification panel\n");
-    print ("  -d, \t --toggle-dnd \t\t\t Toggle and print the current dnd state\n");
-    print ("  -D, \t --get-dnd \t\t\t Print the current dnd state\n");
-    print ("  -dn, \t --dnd-on \t\t\t Turn dnd on and print the new dnd state\n");
-    print ("  -df, \t --dnd-off \t\t\t Turn dnd off and print the new dnd state\n");
-    print ("  -I, \t --get-inhibited \t\t Print if currently inhibited or not\n");
-    print ("  -In, \t --get-num-inhibitors \t\t Print number of inhibitors\n");
-    print ("  -Ia, \t --inhibitor-add [APP_ID] \t Add an inhibitor\n");
-    print ("  -Ir, \t --inhibitor-remove [APP_ID] \t Remove an inhibitor\n");
-    print ("  -Ic, \t --inhibitors-clear \t\t Clears all inhibitors\n");
-    print ("  -c, \t --count \t\t\t Print the current notification count\n");
-    print (
-        "      \t --hide-latest \t\t\t Hides latest notification. Still shown in Control Center\n");
-    print ("      \t --hide-all \t\t\t Hides all notifications. Still shown in Control Center\n");
-    print ("      \t --close-latest \t\t Closes latest notification\n");
-    print ("  -C, \t --close-all \t\t\t Closes all notifications\n");
-    print ("  -a, \t --action [ACTION_INDEX]\t " +
-           "Invokes the action [ACTION_INDEX] of the latest notification\n");
-    print ("  -sw, \t --skip-wait \t\t\t Doesn't wait when swaync hasn't been started\n");
-    print ("  -s, \t --subscribe \t\t\t Subscribe to notification add and close events\n");
-    print ("  -swb,  --subscribe-waybar \t\t Subscribe to notification add and close events "
-           + "with waybar support. Read README for example\n");
-    print ("      \t --change-cc-monitor \t\t Changes the preferred control center monitor"
-           + " (resets on config reload)\n");
-    print ("      \t --change-noti-monitor \t\t Changes the preferred notification monitor"
-           + " (resets on config reload)\n");
+    print (_("Help:") + "\n");
+    print (_("  -h, \t --help \t\t\t Show help options") + "\n");
+    print (_("  -v, \t --version \t\t\t Prints version") + "\n");
+    print (_("Options:") + "\n");
+    print (_("  -R, \t --reload-config \t\t Reload the config file") + "\n");
+    print (_("  -rs, \t --reload-css \t\t\t Reload the css file. Location change requires restart") + "\n");
+    print (_("  -t, \t --toggle-panel \t\t Toggle the notification panel") + "\n");
+    print (_("  -op, \t --open-panel \t\t\t Opens the notification panel") + "\n");
+    print (_("  -cp, \t --close-panel \t\t\t Closes the notification panel") + "\n");
+    print (_("  -d, \t --toggle-dnd \t\t\t Toggle and print the current dnd state") + "\n");
+    print (_("  -D, \t --get-dnd \t\t\t Print the current dnd state") + "\n");
+    print (_("  -dn, \t --dnd-on \t\t\t Turn dnd on and print the new dnd state") + "\n");
+    print (_("  -df, \t --dnd-off \t\t\t Turn dnd off and print the new dnd state") + "\n");
+    print (_("  -I, \t --get-inhibited \t\t Print if currently inhibited or not") + "\n");
+    print (_("  -In, \t --get-num-inhibitors \t\t Print number of inhibitors") + "\n");
+    print (_("  -Ia, \t --inhibitor-add [APP_ID] \t Add an inhibitor") + "\n");
+    print (_("  -Ir, \t --inhibitor-remove [APP_ID] \t Remove an inhibitor") + "\n");
+    print (_("  -Ic, \t --inhibitors-clear \t\t Clears all inhibitors") + "\n");
+    print (_("  -c, \t --count \t\t\t Print the current notification count") + "\n");
+    print (_("      \t --hide-latest \t\t\t Hides latest notification. Still shown in Control Center") + "\n");
+    print (_("      \t --hide-all \t\t\t Hides all notifications. Still shown in Control Center") + "\n");
+    print (_("      \t --close-latest \t\t Closes latest notification") + "\n");
+    print (_("  -C, \t --close-all \t\t\t Closes all notifications") + "\n");
+    print (_("  -a, \t --action [ACTION_INDEX]\t Invokes the action [ACTION_INDEX] of the latest notification") + "\n");
+    print (_("  -sw, \t --skip-wait \t\t\t Doesn't wait when swaync hasn't been started") + "\n");
+    print (_("  -s, \t --subscribe \t\t\t Subscribe to notification add and close events") + "\n");
+    print (_("  -swb,  --subscribe-waybar \t\t Subscribe to notification add and close events with waybar support. Read README for example") + "\n");
+    print (_("      \t --change-cc-monitor \t\t Changes the preferred control center monitor (resets on config reload)") + "\n");
+    print (_("      \t --change-noti-monitor \t\t Changes the preferred notification monitor (resets on config reload)") + "\n");
 }
 
 private void on_subscribe (uint count, bool dnd, bool cc_open, bool inhibited) {
@@ -112,7 +107,7 @@ private void on_subscribe_waybar (uint count, bool dnd, bool cc_open, bool inhib
 
     string tooltip = "";
     if (count > 0) {
-        tooltip = "%u Notification%s".printf (count, count > 1 ? "s" : "");
+        tooltip = ngettext ("%u Notification", "%u Notifications", count).printf (count);
     }
 
     string _class = "\"%s\"".printf (state);
@@ -369,6 +364,12 @@ int try_connect (owned string[] args) {
 }
 
 public int main (string[] args) {
+    // Initialize i18n
+    Intl.setlocale (LocaleCategory.ALL, "");
+    Intl.bindtextdomain ("swaync", "/usr/share/locale");
+    Intl.bind_textdomain_codeset ("swaync", "UTF-8");
+    Intl.textdomain ("swaync");
+
     if (try_connect (args[1 :]) == 1) {
         MainLoop loop = new MainLoop ();
         Bus.watch_name (
